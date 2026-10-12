@@ -1,0 +1,16 @@
+---
+interface Props { items: [string, string | undefined][] }
+const items = Astro.props.items.filter(([, v]) => v);
+---
+<section class="meta" aria-label="Project facts">
+  <dl>
+    {items.map(([k, v]) => (<div><dt class="t-label-caps-small text-muted">{k}</dt><dd class="t-body-small">{v}</dd></div>))}
+  </dl>
+</section>
+<style>
+  .meta { background: var(--color-bg-surface); border-bottom: 1px solid var(--color-border-default); padding: var(--space-6) var(--layout-margin-content); }
+  dl { margin: 0; display: grid; grid-template-columns: repeat(6, auto); gap: var(--space-4) var(--space-8); justify-content: start; }
+  dd { margin: 4px 0 0; }
+  @media (max-width: 1023px) { .meta { padding-inline: var(--margin); } dl { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 743px) { dl { grid-template-columns: repeat(2, 1fr); } }
+</style>

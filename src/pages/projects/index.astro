@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import ProjectCardSmall from '../../components/ProjectCardSmall.astro';
+import ContactTeaser from '../../components/ContactTeaser.astro';
+const all = (await getCollection('cases', (c) => !c.data.hidden)).sort((a, b) => a.data.order - b.data.order);
+const latest = all.filter((c) => c.data.section === 'latest');
+const older = all.filter((c) => c.data.section === 'older');
+---
+<Base title="Projects & Case Studies — Andreas Schwankl" active="projects">
+  <section class="section">
+    <p class="t-label-caps-small text-muted">Selected work</p>
+    <h1 class="t-display-h1 is-content">Projects & Case Studies</h1>
+    <p class="t-body-large text-secondary">A curated selection of projects spanning product design, strategy and team leadership.</p>
+  </section>
+  <section class="section" data-theme="sand" aria-labelledby="latest-title">
+    <h2 id="latest-title" class="t-section-title is-content"><span class="t-highlight">The latest projects</span></h2>
+    <div class="grid-2 is-wide">{latest.map((e) => <ProjectCard entry={e} />)}</div>
+  </section>
+  {older.length > 0 && (
+    <section class="section" aria-labelledby="older-title">
+      <h2 id="older-title" class="t-section-title is-content"><span class="t-highlight">Case studies &amp; projects · Older</span></h2>
+      <div class="grid-3 is-content">{older.map((e) => <ProjectCardSmall entry={e} />)}</div>
+    </section>
+  )}
+  <ContactTeaser headline="Got a challenge that needs design direction?" />
+</Base>
+<style>
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
+  @media (max-width: 1023px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 743px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+</style>

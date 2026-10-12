@@ -1,0 +1,91 @@
+---
+// Image + text side by side.
+// DOM order is always: head (optional) → figure → text, so tablet/mobile show
+// headline, image, copy (image-first). On desktop the grid places the image beside head + text.
+//  - imageSide: which side the image sits on (desktop)
+//  - size: 'half' (6 of 12 cols, default) | 'compact' (5 cols, height-capped – for portrait images)
+//  - title: optional H3 above the text (sub-section)
+//  - chapter/phase/heading: renders the chapter kicker + H2 inside the split (use with <Chapter headless>)
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+interface Props {
+  src: ImageMetadata; alt: string; caption?: string; title?: string;
+  imageSide?: 'left' | 'right'; size?: 'half' | 'compact';
+  chapter?: string; phase?: string; heading?: string;
+}
+const { src, alt, caption, title, imageSide = 'right', size = 'half', chapter, phase, heading } = Astro.props;
+const full = await getImage({ src, format: 'webp', width: Math.min(src.width, 2800) });
+const hasHead = Boolean(title || heading);
+---
+<div class:list={['split', size === 'compact' ? 'is-content' : 'is-wide', `split--image-${imageSide}`, `split--${size}`, { 'split--has-head': hasHead }]}>
+  {hasHead && (
+    <div class="split__head">
+      {heading && <p class="t-label-caps-large kicker">{chapter} · {phase}</p>}
+      {heading && <h2 id={`chapter-${chapter}-title`} class="t-display-h2">{heading}</h2>}
+      {title && <h3 class="t-heading-h3">{title}</h3>}
+    </div>
+  )}
+  <figure class="split__figure">
+    <a class="split__link" href={full.src} data-lightbox data-caption={caption}>
+      <Image src={src} alt={alt} widths={[480, 800, Math.min(src.width, 1400)]} sizes="(max-width: 743px) 100vw, (max-width: 1023px) 60vw, 640px" />
+      <span class="visually-hidden">(opens enlarged image)</span>
+    </a>
+    {caption && <figcaption class="t-body-caption text-muted">{caption}</figcaption>}
+  </figure>
+  <div class="split__text">
+    <slot />
+  </div>
+</div>
+<style>
+  .split { margin-top: var(--space-8); display: grid; grid-template-columns: minmax(0, 1fr); row-gap: var(--space-6); }
+  .split__head { display: grid; gap: var(--space-3); }
+  .split__head :global(.kicker) { margin: 0; }
+  .split__text { display: grid; gap: var(--space-4); max-width: 720px; }
+  .split__text :global(p) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); margin: 0; }
+  .split__figure { margin: 0; }
+  .split__link { display: block; border-radius: var(--radius-md); overflow: hidden; cursor: zoom-in; }
+  .split__link img { width: 100%; height: auto; }
+  .split__figure figcaption { margin-top: var(--space-3); }
+
+  /* compact: the figure shrinks to the image width, caption wraps beneath it */
+  .split--compact .split__figure { display: table; }
+  .split--compact .split__figure figcaption { display: table-caption; caption-side: bottom; }
+  .split--compact .split__link { display: inline-block; }
+
+  /* Tablet: stacked, image-first; compact images capped in height and left-aligned */
+  @media (min-width: 744px) and (max-width: 1023px) {
+    .split--compact .split__link img { width: auto; max-width: 100%; max-height: 560px; }
+  }
+
+  /* Desktop: image beside head + text */
+  @media (min-width: 1024px) {
+    .split { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--space-8); row-gap: var(--space-4); align-items: start; }
+    .split__head, .split__text { grid-column: 2 / span 5; }
+    .split__figure { grid-row: 1 / span 2; grid-column: 7 / span 6; }
+    .split:not(.split--has-head) .split__figure { grid-row: 1; }
+    .split--has-head { grid-template-rows: auto 1fr; }
+    .split--has-head .split__head { grid-row: 1; align-self: end; }
+    .split--has-head .split__text { grid-row: 2; }
+    .split:not(.split--has-head) .split__text { grid-row: 1; align-self: center; }
+    .split--image-left .split__figure { grid-column: 1 / span 6; }
+    .split--image-left .split__head, .split--image-left .split__text { grid-column: 8 / span 5; }
+
+    /* compact (portrait images): two equal halves on the content width; image and text both
+       hug the centre gutter, text block top-aligned with the image and left-aligned (ragged right) */
+    .split--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-16); grid-template-rows: auto; }
+    .split--compact .split__figure, .split--compact:not(.split--has-head) .split__text, .split--compact .split__head { grid-row: 1; align-self: start; }
+    .split--compact .split__text { max-width: 440px; width: 100%; }
+    .split--compact.split--image-left .split__figure { grid-column: 1; justify-self: end; }
+    .split--compact.split--image-left .split__text { grid-column: 2; justify-self: start; }
+    .split--compact.split--image-right .split__figure { grid-column: 2; justify-self: start; }
+    .split--compact.split--image-right .split__text { grid-column: 1; justify-self: end; }
+    .split--compact .split__link img { width: auto; max-width: 100%; max-height: 640px; }
+    .split--compact.split--has-head { grid-template-rows: auto 1fr; row-gap: var(--space-4); }
+    .split--compact.split--has-head .split__figure { grid-row: 1 / span 2; }
+    .split--compact.split--has-head .split__head { grid-row: 1; align-self: start; max-width: 440px; width: 100%; }
+    .split--compact.split--has-head .split__text { grid-row: 2; align-self: start; }
+    .split--compact.split--image-left .split__head { grid-column: 2; justify-self: start; }
+    .split--compact.split--image-right .split__head { grid-column: 1; justify-self: end; }
+  }
+  @media (max-width: 743px) { .split__text :global(p) { font-size: 1rem; } }
+</style>

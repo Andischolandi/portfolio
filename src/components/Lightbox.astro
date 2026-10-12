@@ -1,0 +1,138 @@
+<dialog class="lightbox" aria-label="Enlarged image">
+  <div class="lightbox__stage">
+    <figure class="lightbox__figure" tabindex="-1" autofocus>
+      <img alt="" decoding="async" />
+      <figcaption class="lightbox__caption t-body-caption"></figcaption>
+    </figure>
+    <span class="lightbox__loader" aria-hidden="true"><span class="lightbox__spinner"></span></span>
+  </div>
+  <p class="lightbox__status visually-hidden" aria-live="polite"></p>
+  <button class="lightbox__btn lightbox__btn--close btn-icon-overlay" type="button" aria-label="Close" title="Close (Esc)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="lightbox__btn lightbox__btn--prev btn-icon-overlay" type="button" aria-label="Previous image" title="Previous image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="lightbox__btn lightbox__btn--next btn-icon-overlay" type="button" aria-label="Next image" title="Next image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+</dialog>
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>('.lightbox')!;
+  const stage = dlg.querySelector<HTMLElement>('.lightbox__stage')!;
+  const fig = dlg.querySelector<HTMLElement>('.lightbox__figure')!;
+  const img = dlg.querySelector('img')!;
+  const cap = dlg.querySelector<HTMLElement>('.lightbox__caption')!;
+  const status = dlg.querySelector('.lightbox__status')!;
+  let items: HTMLAnchorElement[] = [];
+  let index = 0;
+  let opener: HTMLElement | null = null;
+  let token = 0;
+
+  // Reserve room for the caption below the fitted image
+  const measure = () => fig.style.setProperty('--cap-h', `${cap.offsetHeight}px`);
+
+  function setZoom(on: boolean) {
+    dlg.classList.toggle('is-actual', on);
+    // Zoom into the centre of the image, never into an empty corner
+    requestAnimationFrame(() => {
+      stage.scrollLeft = (stage.scrollWidth - stage.clientWidth) / 2;
+      stage.scrollTop = on ? (img.offsetTop + img.offsetHeight / 2) - stage.clientHeight / 2 : 0;
+    });
+  }
+
+  function show(i: number) {
+    index = (i + items.length) % items.length;
+    const a = items[index];
+    const t = ++token;
+    img.removeAttribute('src');            // never flash the previous image
+    img.alt = a.querySelector('img')?.alt ?? '';
+    cap.textContent = a.dataset.caption ?? '';
+    cap.hidden = !cap.textContent;
+    measure();
+    status.textContent = items.length > 1 ? `Image ${index + 1} of ${items.length}` : '';
+    dlg.classList.remove('is-actual');     // next/previous always opens fitted to the screen
+    stage.scrollTo(0, 0);
+    dlg.classList.add('is-loading');
+    const pre = new Image();
+    pre.src = a.href;
+    const done = () => { if (t !== token) return; img.src = a.href; dlg.classList.remove('is-loading'); };
+    (pre.decode ? pre.decode() : Promise.resolve()).then(done, done);
+    if (items.length > 1) [index + 1, index - 1].forEach((n) => { new Image().src = items[(n + items.length) % items.length].href; });
+  }
+
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-lightbox]');
+    if (!a) return;
+    e.preventDefault();
+    opener = a;
+    items = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[data-lightbox]'));
+    dlg.classList.toggle('is-single', items.length < 2);
+    if (!dlg.open) dlg.showModal();
+    show(items.indexOf(a));
+  });
+
+  dlg.querySelector('.lightbox__btn--prev')!.addEventListener('click', () => show(index - 1));
+  dlg.querySelector('.lightbox__btn--next')!.addEventListener('click', () => show(index + 1));
+  dlg.querySelector('.lightbox__btn--close')!.addEventListener('click', () => dlg.close());
+  img.addEventListener('click', () => setZoom(!dlg.classList.contains('is-actual')));
+  stage.addEventListener('click', (e) => { if (e.target === stage) dlg.close(); });
+  dlg.addEventListener('keydown', (e) => {
+    if (items.length < 2) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); show(index - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
+  });
+  dlg.addEventListener('close', () => { token++; img.removeAttribute('src'); dlg.classList.remove('is-loading', 'is-actual'); opener?.focus(); });
+  window.addEventListener('resize', () => { if (dlg.open) measure(); });
+
+  // Swipe left/right to browse (only while the image is fitted, not zoomed)
+  let sx = 0, sy = 0, tracking = false;
+  stage.addEventListener('touchstart', (e) => {
+    tracking = e.touches.length === 1 && !dlg.classList.contains('is-actual') && (window.visualViewport?.scale ?? 1) <= 1.01;
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', (e) => {
+    if (!tracking || items.length < 2) return;
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(index + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+</script>
+<style>
+  /* Page background; image centred and fitted to the viewport (portrait + landscape); caption belongs to the image */
+  .lightbox { --pad: var(--space-8, 32px); --edge: 16px;
+    width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+    background: var(--color-bg-page); color: var(--color-text-primary); overflow: hidden; }
+  .lightbox::backdrop { background: var(--color-bg-page); }
+  .lightbox__stage { position: absolute; inset: 0; overflow: auto; display: flex; padding: var(--pad);
+    touch-action: pan-x pan-y pinch-zoom; overscroll-behavior: contain; }
+  /* margin:auto centres in both axes and keeps every part reachable when the zoomed image overflows */
+  .lightbox__figure { margin: auto; display: table; outline: none; }
+  .lightbox__figure img { display: block; max-width: calc(100vw - 2 * var(--pad));
+    max-height: calc(100dvh - 2 * var(--pad) - var(--cap-h, 0px)); width: auto; height: auto;
+    cursor: zoom-in; transition: opacity .2s ease; }
+  .lightbox__caption { display: table-caption; caption-side: bottom; text-align: center; color: var(--color-text-secondary);
+    padding-top: var(--space-3, 12px); text-wrap: balance; }
+  .lightbox__caption[hidden] { display: none; }
+  .lightbox.is-loading .lightbox__figure { opacity: 0; }
+  .lightbox.is-actual .lightbox__figure img { max-width: none; max-height: none; cursor: zoom-out; }
+
+  /* Controls float on top of the image, always visible */
+  .lightbox__btn { position: fixed; z-index: 2; }
+  .lightbox__btn--close { top: var(--edge); right: var(--edge); }
+  .lightbox__btn--prev, .lightbox__btn--next { top: 50%; transform: translateY(-50%); }
+  .lightbox__btn--prev { left: var(--edge); }
+  .lightbox__btn--next { right: var(--edge); }
+  .lightbox.is-single .lightbox__btn--prev, .lightbox.is-single .lightbox__btn--next { display: none; }
+
+  /* Loader */
+  .lightbox__loader { position: fixed; inset: 0; display: none; place-items: center; pointer-events: none; }
+  .lightbox.is-loading .lightbox__loader { display: grid; }
+  .lightbox__spinner { width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--color-border-default);
+    border-top-color: var(--accent-fill, var(--color-accent-green-fill)); animation: lb-spin .8s linear infinite; }
+  @keyframes lb-spin { to { transform: rotate(360deg); } }
+  @keyframes lb-pulse { 50% { opacity: .35; } }
+  @media (prefers-reduced-motion: reduce) { .lightbox__spinner { animation: lb-pulse 1.6s ease-in-out infinite; } .lightbox__figure img { transition: none; } }
+
+  /* Phones: edge-to-edge image, navigation in the bottom corners within thumb reach */
+  @media (max-width: 743px) {
+    .lightbox { --pad: 0px; --edge: 12px; }
+    .lightbox__caption { padding: var(--space-3, 12px) 64px 0; }
+    .lightbox__btn--prev, .lightbox__btn--next { top: auto; bottom: calc(var(--edge) + env(safe-area-inset-bottom)); transform: none; }
+  }
+  /* Phones in landscape */
+  @media (max-height: 500px) { .lightbox { --pad: 8px; --edge: 12px; } }
+</style>

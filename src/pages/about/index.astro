@@ -1,0 +1,169 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import ContactTeaser from '../../components/ContactTeaser.astro';
+import portrait from '../../assets/profile/profile-about.png';
+const cv = '/cv/CV_Andreas-Schwankl_2026-10_eng.pdf';
+const skills = ['Strategy', 'Research', 'Leadership', 'Systems Thinking', 'Experience Management'];
+const values = [
+  { t: 'Human-Centered Design', d: 'Every decision starts with real people — their needs, behaviours and barriers. I bring user evidence into rooms where it is usually missing.', c: 'pink' },
+  { t: 'Clarity Over Complexity', d: 'I turn overwhelming findings into a few clear priorities that teams can act on.', c: 'blue' },
+  { t: 'Collaborative Leadership', d: 'Great outcomes need shared ownership. I build alliances across product, engineering, editorial and leadership.', c: 'violet' },
+  { t: 'Iterative Excellence', d: 'Perfect is the enemy of progress. I believe in launching, learning, and iterating quickly while maintaining high standards for craft and quality.', c: 'yellow' },
+  { t: 'Ethical Responsibility', d: 'Design has power and responsibility. I advocate for inclusive, accessible experiences that work for everyone.', c: 'green' },
+  { t: 'Strategic Thinking', d: 'Design decisions must serve users and the business. I connect them to roadmaps, costs and long-term goals.', c: 'blue' },
+];
+const approach = [
+  { t: 'Discover & Understand', d: 'Deep user research, stakeholder interviews and competitive analysis to uncover the real problem at hand.', case: 'Interactive TV', href: '/cases/interactive-tv/#chapter-04', ch: '04 · We understood participation data – but not the fans behind it' },
+  { t: 'Define & Strategize', d: 'Transform insights into clear problem statements, strategic alliances and design principles that guide all subsequent decisions.', case: 'Cornelsen', href: '/cases/cornelsen-uma/#chapter-06', ch: '06 · Evidence clusters revealed the broken key moments' },
+  { t: 'Design & Prototype', d: 'Rapid ideation, prototyping, and testing to validate concepts before investing in full development.', case: 'Interactive TV', href: '/cases/interactive-tv/#chapter-08', ch: '08 · “One tap away”' },
+  { t: 'Deliver & Iterate', d: 'Ship with confidence, measure impact, and continuously improve based on real user feedback and data.', case: 'Cornelsen', href: '/cases/cornelsen-uma/#chapter-09', ch: '09 · From static campaign page to evolving product story' },
+];
+const experience = [
+  { y: '2021–2025', co: 'JOYN / SevenOne / ProSiebenSat.1', role: 'VP UX Design & Research', d: 'Led UX Design and Research for one of Germany’s largest streaming platforms, driving user growth, engagement, and content discovery across web, mobile, and TV.' },
+  { y: '2018–2021', co: 'Cornelsen Education', role: 'UX Team Lead', d: 'Led UX for Cornelsen’s digital ecosystem including eCommerce platform and learning products, focusing on conversion optimization and content discovery.' },
+  { y: '2015–2018', co: 'waipu.tv / Exaring / ui/deation', role: 'UX Lead Designer', d: 'Led UX for waipu.tv multi-platform IPTV products across web, mobile, TV, and voice (Alexa), focusing on user acquisition, engagement, and retention.' },
+  { y: '2008–2014', co: 'OVI / Nokia Maps / HERE', role: 'UX Design Team Lead', d: 'Led UX for global location-based services and mapping products, designing navigation, search and real-time location sensing experiences across web and mobile.' },
+];
+---
+<Base title="About — Andreas Schwankl, Product Design Director" description="Andreas Schwankl — Product Design Director in Berlin. Design and research leadership for digital products, from first insight to lasting practice." active="about">
+  <section class="section about-hero" data-theme="earth" aria-labelledby="about-title">
+    <div class="about-hero__grid is-content">
+      <div class="about-hero__text">
+        <p class="t-label-caps-small text-muted">About</p>
+        <h1 id="about-title" class="t-display-h1">Product Design Director <span class="t-script about-hero__script">Design + Research</span></h1>
+        <p class="t-body-large text-secondary">I turn complex product challenges into clear, shared direction — and into experiences that last. For 15+ years I have led design and research teams, from early concepts to products used by millions, in streaming, media and digital education.</p>
+        <p class="t-body-default text-secondary">My work starts with understanding people and ends when new ways of working are embedded in the organisation: from accessibility programmes and interactive TV to customer journey management.</p>
+        <ul class="tags" aria-label="Focus areas">{skills.map((s) => <li class="chip t-ui-tag">{s}</li>)}</ul>
+      </div>
+      <div class="about-hero__portrait">
+        <Image src={portrait} alt="Illustrated portrait of Andreas Schwankl in a beanie and a sweater with a planet earth print, a small fish peeking over his shoulder." widths={[300, 450, 742]} sizes="(max-width: 743px) 70vw, 340px" loading="eager" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section about-quote" aria-label="My design philosophy">
+    <figure class="about-quote__inner is-content">
+      <blockquote class="t-quote-large">“Great design is your helpful servant, when complicated and stressful things feel effortless and joyful.”</blockquote>
+      <figcaption class="t-body-caption">— My design philosophy in essence —</figcaption>
+    </figure>
+  </section>
+
+  <section class="section about-values-head" data-theme="sand" id="values" aria-labelledby="values-title">
+    <div class="about-center is-content">
+      <h2 id="values-title" class="t-display-h2">Values &amp; Principles</h2>
+      <p class="t-body-default text-secondary">These principles have shaped how I design, how I lead teams and how I approach complex challenges.</p>
+    </div>
+  </section>
+  <section class="section about-values" aria-labelledby="values-title">
+    <ul class="values is-content">
+      {values.map((v) => (
+        <li class="value" data-accent={v.c}>
+          <span class="value__icon" aria-hidden="true"><span></span></span>
+          <h3 class="t-heading-h4">{v.t}</h3>
+          <p class="t-body-small text-secondary">{v.d}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section about-approach" data-theme="sand" aria-labelledby="approach-title">
+    <div class="approach is-content">
+      <div>
+        <h2 id="approach-title" class="t-display-h2">My Design Approach</h2>
+        <ol class="steps">
+          {approach.map((s) => (
+            <li class="step">
+              <h3 class="t-heading-h4">{s.t}</h3>
+              <p class="t-body-small text-secondary">{s.d}</p>
+              <p class="step__case t-body-caption"><span class="text-muted">See it in practice:</span> <a href={s.href}>{s.case} · {s.ch}</a></p>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <aside class="approach__card" aria-label="User-Centered Process">
+        <span class="approach__icon" aria-hidden="true"><span></span></span>
+        <p class="t-heading-h4">User-Centered Process</p>
+        <p class="t-body-small text-secondary">Every step of my process is anchored in understanding and serving real human needs.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section about-exp" aria-labelledby="exp-title">
+    <div class="exp is-content">
+      <div class="exp__head">
+        <h2 id="exp-title" class="t-display-h2">Experience</h2>
+        <p class="t-body-default text-secondary">A selection of the roles that shaped how I work.</p>
+        <p><a class="btn btn--primary t-ui-button" href={cv} download>Download CV <span aria-hidden="true">↓</span><span class="visually-hidden"> (PDF)</span></a></p>
+      </div>
+      <ol class="timeline">
+        {experience.map((e) => (
+          <li class="timeline__item">
+            <p class="t-label-caps-small text-muted">{e.y}</p>
+            <h3 class="t-heading-h4">{e.role} <span class="timeline__co">· {e.co}</span></h3>
+            <p class="t-body-small text-secondary">{e.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <ContactTeaser headline="Got a challenge that needs design leadership?" theme="warm-white" />
+</Base>
+<style>
+  .about-hero { padding-block: var(--space-16) 0; overflow: hidden; }
+  .about-hero__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-8); align-items: end; }
+  .about-hero__text { display: grid; gap: var(--space-4); align-self: center; padding-bottom: var(--space-16); }
+  .about-hero__text > * { margin: 0; }
+  .about-hero__script { display: block; text-transform: uppercase; font-size: 0.86em; color: var(--color-accent-green-text); }
+  .chip { border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 4px 12px; color: var(--color-text-secondary); }
+  .about-hero__portrait { justify-self: center; width: min(100%, 340px); }
+  .about-hero__portrait :global(img) { display: block; width: 100%; height: auto; }
+
+  .about-quote { background: var(--color-bg-emphasis); color: #fff; }
+  .about-quote__inner { margin: 0 auto; max-width: 820px; text-align: center; display: grid; gap: var(--space-4); }
+  .about-quote__inner blockquote { margin: 0; }
+  .about-quote__inner figcaption { color: rgba(255,255,255,.85); }
+
+  .about-center { text-align: center; max-width: 640px; margin-inline: auto; display: grid; gap: var(--space-4); }
+  .about-center > * { margin: 0; }
+  .values { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-12) var(--space-16); }
+  .value { display: grid; gap: var(--space-2); align-content: start; }
+  .value > * { margin: 0; }
+  .value__icon, .approach__icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; background: var(--color-bg-surface); margin-bottom: var(--space-2); }
+  .value__icon span { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-fill); }
+
+  .approach { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-12); align-items: start; }
+  .steps { list-style: none; margin: var(--space-6) 0 0; padding: 0; border-top: 1px solid var(--color-border-strong); }
+  .step { display: grid; gap: var(--space-1, 4px); padding: var(--space-4) 0; border-bottom: 1px solid var(--color-border-strong); }
+  .step > * { margin: 0; }
+  .step__case a { color: var(--color-text-primary); text-underline-offset: 3px; }
+  .approach__card { display: grid; justify-items: center; text-align: center; gap: var(--space-3); padding: var(--space-12) var(--space-8); border-radius: var(--radius-lg); background: #e8f5ee; color: #1a1a22; border: 1px solid #cfe6da; margin-top: var(--space-12); }
+  .approach__card > p { margin: 0; }
+  .approach__card .text-secondary { color: #4a4a58; }
+  .approach__icon { width: 48px; height: 48px; background: var(--color-accent-green-fill); border-radius: 12px; }
+  .approach__icon span { width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+
+  .exp { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-12); align-items: start; }
+  .exp__head { display: grid; gap: var(--space-4); position: sticky; top: var(--space-24); }
+  .exp__head > * { margin: 0; }
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 var(--space-6); border-left: 2px solid var(--color-border-strong); display: grid; gap: var(--space-8); }
+  .timeline__item { position: relative; display: grid; gap: var(--space-1, 4px); }
+  .timeline__item > * { margin: 0; }
+  .timeline__item::before { content: ''; position: absolute; left: calc(-1 * var(--space-6) - 7px); top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--color-accent-green-fill); border: 2px solid var(--color-bg-page); }
+  .timeline__co { font-weight: 500; color: var(--color-text-secondary); }
+
+  @media (max-width: 1023px) {
+    .about-hero__grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+    .approach, .exp { grid-template-columns: 1fr; gap: var(--space-8); }
+    .approach__card { margin-top: 0; }
+    .exp__head { position: static; }
+  }
+  @media (max-width: 743px) {
+    .about-hero { padding-top: var(--space-10, 40px); }
+    .about-hero__grid { grid-template-columns: 1fr; gap: 0; }
+    .about-hero__text { padding-bottom: var(--space-8); }
+    .about-hero__portrait { width: min(70%, 280px); }
+    .values { grid-template-columns: 1fr; gap: var(--space-8); }
+  }
+</style>

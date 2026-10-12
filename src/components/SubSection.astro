@@ -1,0 +1,17 @@
+---
+interface Props { title: string }
+const { title } = Astro.props;
+---
+<div class="subsection">
+  <h3 class="t-heading-h3">{title}</h3>
+  <slot />
+</div>
+<style>
+  .subsection { margin-top: var(--space-8); display: grid; gap: var(--space-4); }
+  .subsection :global(ul), .subsection :global(ol) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); padding-left: 1.25em; margin: 0; display: grid; gap: var(--space-3); }
+  .subsection :global(strong) { color: var(--color-text-primary); }
+  .subsection :global(p) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); }
+  @media (max-width: 743px) { .subsection :global(ul), .subsection :global(ol) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); padding-left: 1.25em; margin: 0; display: grid; gap: var(--space-3); }
+  .subsection :global(strong) { color: var(--color-text-primary); }
+  .subsection :global(p) { font-size: 1rem; } }
+</style>

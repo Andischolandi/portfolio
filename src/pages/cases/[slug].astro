@@ -1,0 +1,85 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import CaseHero from '../../components/CaseHero.astro';
+import MetaStrip from '../../components/MetaStrip.astro';
+import ContactTeaser from '../../components/ContactTeaser.astro';
+
+export async function getStaticPaths() {
+  const cases = await getCollection('cases', (c) => !c.data.hidden);
+  return cases.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+---
+<Base title={`${d.title} ${d.tagline} — Andreas Schwankl`} description={d.summary ?? d.teaser} active="projects">
+  <CaseHero title={d.title} tagline={d.tagline} kicker={`Case study · ${d.company.split('/')[0].trim()}`} tags={d.tags} image={d.keyVisual} alt={d.keyVisualAlt} credit={d.keyVisualCredit} focus={d.focus} accent={d.accent} />
+  <MetaStrip items={[["Company", d.company], ["Year", d.timeframe], ["Role", d.role], ["Platforms", d.platforms], ["Partners", d.partners], ["Standard", d.standard]]} />
+  <div data-accent={d.accent}>
+  {d.draft ? (
+    <section class="section"><p class="t-body-large text-secondary">This case study is being written. Check back soon — or <a href="/contact/">get in touch</a> and I'll walk you through it.</p></section>
+  ) : (
+    <>
+      {d.brief && (
+        <section class="section brief" aria-labelledby="brief-title" data-brief>
+          <div class="brief__head is-content">
+            <h2 id="brief-title" class="t-label-caps-large kicker">Executive brief</h2>
+            <button type="button" class="brief__toggle t-ui-button" aria-expanded="true" aria-controls="brief-cols" hidden>
+              <span class="brief__toggle-more">Show full brief</span><span class="brief__toggle-less">Show less</span>
+            </button>
+          </div>
+          <div class="brief__cols is-content" id="brief-cols">
+            {[['The challenge', d.brief.challenge], ['My role', d.brief.role], ['The shift', d.brief.shift]].map(([label, v]) => (
+              <div class="brief__col">
+                <h3 class="t-label-caps-small text-muted">{label}</h3>
+                {Array.isArray(v)
+                  ? <ul class="brief__list t-body-small text-secondary">{v.map((item, i) => <li class={i === 0 ? 'is-lead' : 'is-more'}>{item}</li>)}</ul>
+                  : <p class="t-body-small text-secondary">{v}</p>}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+      <Content />
+      {d.credits && (
+        <section class="section section--ruled" aria-labelledby="credits-title">
+          <h2 id="credits-title" class="t-label-caps-large text-muted">Credits</h2>
+          <p class="t-body-small text-secondary">{d.credits}</p>
+        </section>
+      )}
+    </>
+  )}
+  </div>
+  <ContactTeaser />
+</Base>
+<style>
+  .brief { padding-block: var(--space-12); row-gap: var(--space-4); border-bottom: 1px solid var(--color-border-default); }
+  .brief__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); }
+  .brief__toggle { font: inherit; font-weight: 600; font-size: 0.875rem; background: none; border: 0; padding: var(--space-2) 0; min-height: 44px; color: var(--accent-text); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .brief__toggle::after { content: '+'; font-size: 1.1em; line-height: 1; }
+  .brief__toggle[aria-expanded="true"]::after { content: '–'; }
+  .brief__toggle[aria-expanded="true"] .brief__toggle-more, .brief__toggle[aria-expanded="false"] .brief__toggle-less { display: none; }
+  .brief__toggle[hidden] { display: none; }
+  .brief.is-collapsed .is-more { display: none; }
+  .brief__list .is-lead { color: var(--color-text-primary); font-weight: 500; }
+  .brief__col { border-top: 2px solid var(--accent-fill, var(--color-accent-green-fill)); padding-top: var(--space-3); }
+  .brief__cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); }
+  .brief__cols > div { display: grid; gap: var(--space-3); align-content: start; }
+  .brief__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+  .brief__list li { position: relative; padding-left: 1.1em; }
+  .brief__list li::before { content: ''; position: absolute; left: 0; top: 0.72em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-fill, var(--color-accent-green-fill)); }
+  @media (max-width: 1023px) and (min-width: 744px) { .brief__cols { gap: var(--space-6); } }
+  @media (max-width: 743px) { .brief__cols { grid-template-columns: 1fr; gap: var(--space-4); } .brief__head { flex-wrap: wrap; } }
+</style>
+<script>
+  // Executive brief: collapsed by default (lead bullet per column), expandable. Without JS everything stays visible.
+  document.querySelectorAll('[data-brief]').forEach((brief) => {
+    const btn = brief.querySelector('.brief__toggle');
+    if (!btn || !brief.querySelector('.is-more')) return;
+    btn.hidden = false;
+    const set = (open) => { btn.setAttribute('aria-expanded', String(open)); brief.classList.toggle('is-collapsed', !open); };
+    set(false);
+    btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+  });
+</script>

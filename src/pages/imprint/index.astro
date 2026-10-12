@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+const email = 'andreas.schwankl.1@gmail.com';
+---
+<Base title="Imprint — Andreas Schwankl" description="Imprint (Impressum) of andreasschwankl.de.">
+  <section class="section" data-theme="warm-white" aria-labelledby="imprint-title">
+    <div class="is-content legal">
+      <p class="t-label-caps-small text-muted">Legal notice</p>
+      <h1 id="imprint-title" class="t-display-h2">Imprint <span class="text-muted" lang="de">(Impressum)</span></h1>
+
+      <h2 class="t-heading-h4">Information pursuant to § 5 DDG</h2>
+      <p class="t-body-default">Andreas Schwankl<br />Pasteurstr. 32<br />10407 Berlin<br />Germany</p>
+
+      <h2 class="t-heading-h4">Contact</h2>
+      <p class="t-body-default">Email: <a href={`mailto:${email}`}>{email}</a></p>
+
+      <h2 class="t-heading-h4">Responsible for content pursuant to § 18 (2) MStV</h2>
+      <p class="t-body-default">Andreas Schwankl, address as above</p>
+
+      <h2 class="t-heading-h4">Liability for links</h2>
+      <p class="t-body-default text-secondary">This website contains links to external third-party websites whose content I have no influence over. The respective provider or operator is always responsible for the content of linked pages. If I become aware of any legal violations, I will remove such links immediately.</p>
+
+      <h2 class="t-heading-h4">Copyright</h2>
+      <p class="t-body-default text-secondary">Texts, images and graphics on this website are subject to German copyright law. Images from client projects are shown in reference to the respective projects; all rights remain with their respective owners.</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .legal { display: grid; gap: var(--space-4); max-width: 46rem; }
+  .legal h2 { margin-top: var(--space-6); }
+</style>

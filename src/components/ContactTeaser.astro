@@ -1,0 +1,26 @@
+---
+interface Props { headline?: string; theme?: 'sand' | 'warm-white' | 'earth' | 'night' }
+const { headline = 'Got a challenge that needs design direction?', theme = 'sand' } = Astro.props;
+---
+<section class="section section--ruled teaser" data-theme={theme} aria-labelledby="teaser-title">
+  <div class="teaser__grid is-content">
+    <div class="teaser__head">
+      <p class="t-label-caps-large kicker">Let's have a chat</p>
+      <h2 id="teaser-title" class="t-display-h1">{headline}</h2>
+    </div>
+    <div class="teaser__action">
+      <p class="t-body-large text-secondary">I'm open to new roles in UX, product design and research leadership. Whether you're hiring, exploring a collaboration or just want to exchange ideas — I'd love to hear from you.</p>
+      <p class="teaser__buttons">
+        <a class="btn btn--primary t-ui-button" href="/contact/">Get in touch <span aria-hidden="true">→</span></a>
+        <a class="btn btn--secondary t-ui-button" href="https://www.linkedin.com/in/andreasschwankl/" rel="noopener">LinkedIn <span aria-hidden="true">→</span></a>
+      </p>
+    </div>
+  </div>
+</section>
+<style>
+  .teaser__grid { display: grid; grid-template-columns: 7fr 5fr; gap: var(--space-8); align-items: end; }
+  .teaser__head { display: grid; gap: var(--space-4); }
+  .teaser__action { display: grid; gap: var(--space-6); }
+  .teaser__buttons { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  @media (max-width: 1023px) { .teaser__grid { grid-template-columns: 1fr; gap: var(--space-6); } }
+</style>

@@ -1,0 +1,15 @@
+---
+// Running text in two columns on desktop (≥1024px); single column on tablet and mobile.
+---
+<div class="cols is-content"><slot /></div>
+<style>
+  .cols :global(p), .cols :global(ul), .cols :global(ol) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); margin: 0 0 var(--space-4); }
+  .cols :global(ul), .cols :global(ol) { padding-left: 1.25em; display: grid; gap: var(--space-3); }
+  .cols :global(li) { break-inside: avoid; }
+  .cols :global(strong) { color: var(--color-text-primary); }
+  .cols { max-width: 720px; }
+  @media (min-width: 1024px) {
+    .cols { max-width: none; column-count: 2; column-gap: var(--space-12); }
+  }
+  @media (max-width: 743px) { .cols :global(p), .cols :global(ul), .cols :global(ol) { font-size: 1rem; } }
+</style>

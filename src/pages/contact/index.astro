@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+const email = 'andreas.schwankl.1@gmail.com';
+const cv = '/cv/CV_Andreas-Schwankl_2026-10_eng.pdf';
+const channels = [
+  { k: 'Email', v: email, href: `mailto:${email}`, cta: 'Write an email', note: 'The fastest way to reach me. I usually reply within two working days.' },
+  { k: 'LinkedIn', v: 'in/andreasschwankl', href: 'https://www.linkedin.com/in/andreasschwankl/', cta: 'Connect on LinkedIn', note: 'Career history, recommendations and the occasional post.', ext: true },
+  { k: 'CV', v: 'PDF · English', href: cv, cta: 'Download CV', note: 'Roles, projects and skills on two pages.', download: true },
+];
+---
+<Base title="Contact — Andreas Schwankl" description="Get in touch with Andreas Schwankl, Product Design Director in Berlin — by email, on LinkedIn or via CV download." active="contact">
+  <section class="section contact-hero" data-theme="sand" aria-labelledby="contact-title">
+    <div class="is-content contact-hero__text">
+      <p class="t-label-caps-large kicker">Let's have a chat</p>
+      <h1 id="contact-title" class="t-display-h1">Got a challenge that needs <span class="t-script">design</span> leadership?</h1>
+      <p class="t-body-large text-secondary">I'm open to new roles in UX, product design and research leadership. Whether you're hiring, exploring a collaboration or just want to exchange ideas — I'd love to hear from you.</p>
+    </div>
+  </section>
+  <section class="section" data-theme="warm-white" aria-label="Ways to get in touch">
+    <ul class="channels is-content">
+      {channels.map((c) => (
+        <li class="channel">
+          <p class="t-label-caps-small text-muted">{c.k}</p>
+          <p class={`t-heading-h3 channel__value ${c.k === "Email" ? "channel__value--sm" : ""}`}>{c.v}</p>
+          <p class="t-body-default text-secondary">{c.note}</p>
+          <a class={`btn ${c.k === 'Email' ? 'btn--primary' : 'btn--secondary'} t-ui-button channel__btn`} href={c.href}
+            {...(c.ext ? { target: '_blank', rel: 'noopener' } : {})}
+            {...(c.download ? { download: '' } : {})}>
+            {c.cta} <span aria-hidden="true">{c.download ? '↓' : c.ext ? '↗' : '→'}</span>
+            {c.ext && <span class="visually-hidden">(opens in a new tab)</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="is-content t-body-caption text-muted contact__where">Based in Berlin, Germany · open to hybrid and remote work.</p>
+  </section>
+</Base>
+<style>
+  .contact-hero__text { display: grid; gap: var(--space-6); max-width: 60rem; }
+  .channels { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
+  .channel { display: grid; grid-template-rows: auto auto 1fr auto; gap: var(--space-3); padding: var(--space-8) var(--space-6); border: 1px solid var(--color-border-default); border-top: 3px solid var(--color-accent-green-text); background: var(--color-bg-page); }
+  .channel__value { overflow-wrap: anywhere; }
+  .channel__value--sm { font-size: 1.25rem; }
+  .channel__btn { justify-self: start; margin-top: var(--space-3); }
+  .contact__where { margin-top: var(--space-8); }
+  @media (max-width: 1023px) { .channels { grid-template-columns: 1fr; } }
+</style>

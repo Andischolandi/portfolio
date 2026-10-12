@@ -1,0 +1,37 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+interface Props { title: string; tagline: string; kicker: string; tags: (string | { label: string; to: string })[]; image: ImageMetadata; alt: string; credit?: string; focus?: string; accent: string }
+const { title, tagline, kicker, tags, image, alt, credit, focus = 'center', accent } = Astro.props;
+---
+<header class="hero" data-theme="night" data-accent={accent}>
+  <Picture class="hero__img" src={image} alt={alt} formats={["avif", "webp"]} fallbackFormat="jpg" widths={[480, 800, 1440, 2048]} sizes="100vw" style={`object-position:${focus}`} loading="eager" fetchpriority="high" />
+  <div class="hero__text">
+    <p class="t-label-caps-small accent">{kicker}</p>
+    <h1 class="t-display-h1">{title} <span class="accent">{tagline}</span></h1>
+    <ul class="tags" aria-label="Jump to a topic">{tags.map((t) => typeof t === 'string'
+      ? <li class="tag t-ui-tag">{t}</li>
+      : <li><a class="tag tag--link t-ui-tag" href={`#chapter-${t.to}`}>{t.label}</a></li>)}</ul>
+  </div>
+  {credit && <p class="hero__credit t-body-caption">{credit}</p>}
+</header>
+<style>
+  .hero { position: relative; min-height: min(680px, 80vh); display: grid; align-items: end; background: var(--color-bg-page); color: var(--color-text-primary); overflow: hidden; }
+  .hero :global(.hero__img), .hero :global(picture) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero :global(.hero__img) { object-fit: cover; }
+  .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,17,23,0) 30%, rgba(15,17,23,.88) 100%); }
+  .hero__text { position: relative; z-index: 1; display: grid; gap: var(--space-4); padding: var(--space-16) var(--layout-margin-content) var(--space-16); max-width: calc(1040px + 2 * var(--layout-margin-content)); }
+  .hero__credit { position: absolute; z-index: 1; right: var(--margin); bottom: var(--space-4); color: rgba(255,255,255,.8); text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+  h1 .accent { display: block; }
+  .tag--link { text-decoration: none; transition: transform .15s, box-shadow .15s; }
+  .tag--link::after { content: ' ↓'; }
+  .tag--link:hover { transform: translateY(-1px); box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
+  @media (max-width: 1023px) { .hero__text { padding-inline: var(--margin); } }
+  @media (max-width: 743px) {
+    .hero { display: block; min-height: 0; }
+    .hero :global(picture), .hero :global(.hero__img) { position: relative; inset: auto; aspect-ratio: 4 / 3; height: auto; }
+    .hero::after { display: none; }
+    .hero__text { padding: var(--space-8) var(--margin) var(--space-10, 40px); }
+    .hero__credit { top: calc(100vw * 0.75 - 32px); bottom: auto; }
+  }
+</style>

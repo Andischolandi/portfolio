@@ -1,0 +1,18 @@
+---
+interface Props { n: string; phase: string; title: string; theme?: string; headless?: boolean }
+// headless: the kicker + headline are rendered by the first child (e.g. FigureSplit with chapter={n}) so an image can sit beside them.
+const { n, phase, title, theme, headless = false } = Astro.props;
+---
+<section class="section section--ruled chapter" id={`chapter-${n}`} aria-labelledby={`chapter-${n}-title`} data-theme={theme}>
+  {!headless && <p class="chapter__kicker t-label-caps-large kicker">{n} · {phase}</p>}
+  {!headless && <h2 id={`chapter-${n}-title`} class="t-display-h2 chapter__title">{title}</h2>}
+  <slot />
+</section>
+<style>
+  .chapter :global(> p:not(.chapter__kicker)) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); }
+  .chapter :global(> ul), .chapter :global(> ol) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); padding-left: 1.25em; display: grid; gap: var(--space-3); }
+  .chapter :global(> ul strong), .chapter :global(> ol strong), .chapter :global(> p strong) { color: var(--color-text-primary); }
+  .chapter__title { grid-column: content; text-wrap: balance; }
+  .chapter__kicker { margin-bottom: calc(var(--space-6) * -0.5); }
+  @media (max-width: 743px) { .chapter :global(> p:not(.chapter__kicker)), .chapter :global(> ul), .chapter :global(> ol) { font-size: 1rem; } }
+</style>

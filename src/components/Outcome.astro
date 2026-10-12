@@ -1,0 +1,51 @@
+---
+interface Props { n: string; title: string; items: string[]; learnings?: string[]; reflection?: string | string[] }
+const { n, title, items, learnings = [], reflection } = Astro.props;
+const md = (t: string) => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+const refl = reflection ? (Array.isArray(reflection) ? reflection : [reflection]) : [];
+// Reflection: a paragraph that starts with **…** turns that sentence into the highlighted key statement;
+// the rest of the paragraph continues as body text. **…** elsewhere stays an inline emphasis.
+const blocks: { key: boolean; text: string }[] = [];
+for (const r of refl) {
+  const m = r.match(/^\*\*(.+?)\*\*\s*(.*)$/s);
+  if (m) { blocks.push({ key: true, text: m[1] }); if (m[2]) blocks.push({ key: false, text: m[2] }); }
+  else blocks.push({ key: false, text: r });
+}
+---
+<section class="section outcome" data-theme="night" aria-labelledby="outcome-title">
+  <p class="t-label-caps-large kicker">{n} · Outcome & Reflection</p>
+  <h2 id="outcome-title" class="t-display-h2">{title}</h2>
+  <ul class="outcome__grid is-content">
+    {items.map((i) => <li class="t-body-default text-secondary">{i}</li>)}
+  </ul>
+  {learnings.length > 0 && (
+    <div class="outcome__learnings is-content">
+      <h3 class="t-label-caps-large text-muted">What didn't work as hoped</h3>
+      <ul>{learnings.map((l) => <li class="t-body-default text-secondary">{l}</li>)}</ul>
+    </div>
+  )}
+  {refl.length > 0 && (
+    <div class="reflection is-content">
+      <p class="t-label-caps-large text-muted">Reflection</p>
+      {blocks.map((b) => b.key
+        ? <p class="reflection__key" set:html={md(b.text)} />
+        : <p class="reflection__text t-body-large" set:html={md(b.text)} />)}
+    </div>
+  )}
+  <slot />
+</section>
+<style>
+  .outcome__grid { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); }
+  .outcome__grid li { border-top: 2px solid var(--accent-fill, var(--color-accent-green-fill)); padding-top: var(--space-4); }
+  .outcome__learnings { margin-top: var(--space-8); display: grid; gap: var(--space-3); }
+  .outcome__learnings ul { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); max-width: 880px; }
+  .outcome__learnings li { border-left: 2px solid var(--color-border-strong); padding-left: var(--space-4); }
+  .reflection { margin: var(--space-12) 0 0; max-width: 880px; display: grid; gap: var(--space-4); }
+  .reflection__key { margin: var(--space-2) 0; padding-left: var(--space-5, 20px); border-left: 3px solid var(--accent-fill, var(--color-accent-green-fill));
+    font-weight: 700; font-size: 1.5rem; line-height: 1.4; letter-spacing: -0.01em; color: var(--color-text-primary); text-wrap: pretty; }
+  .reflection__text { margin: 0; color: var(--color-text-secondary); }
+  .reflection__text :global(strong) { color: var(--color-text-primary); font-weight: 700; }
+  @media (max-width: 743px) { .reflection__key { font-size: 1.25rem; } }
+  @media (max-width: 1023px) { .outcome__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 743px) { .outcome__grid { grid-template-columns: 1fr; gap: var(--space-6); } }
+</style>
