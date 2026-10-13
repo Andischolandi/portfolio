@@ -11,9 +11,14 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Lightbox from '../components/Lightbox.astro';
+import inter400 from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+import inter700 from '@fontsource/inter/files/inter-latin-700-normal.woff2?url';
+import inter800 from '@fontsource/inter/files/inter-latin-800-normal.woff2?url';
+import kalam700 from '@fontsource/kalam/files/kalam-latin-700-normal.woff2?url';
+const preloadFonts = [inter400, inter700, inter800, kalam700];
 
-interface Props { title: string; description?: string; active?: 'projects' | 'about' | 'contact' | null; }
-const { title, description = 'Andreas Schwankl — Product Design Director. Design and research leadership for digital products.', active = null } = Astro.props;
+interface Props { title: string; description?: string; active?: 'projects' | 'about' | 'contact' | null; landing?: boolean; }
+const { title, description = 'Andreas Schwankl — Product Design Director. Design and research leadership for digital products.', active = null, landing = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -26,11 +31,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="color-scheme" content="light" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {preloadFonts.map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Andreas Schwankl" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og-image.png', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Andreas Schwankl, Product Design Director in Berlin – illustrated portrait showing a peace sign, next to his name and the line: Design impactful experiences through insight." />
+    <meta name="twitter:card" content="summary_large_image" />
     <script is:inline>
       /* Every page visit starts at the top (also after back/forward and reload), unless a #anchor is targeted */
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -39,7 +50,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <a class="skip-link t-ui-button" href="#main">Skip to content</a>
-    <Nav active={active} />
+    <Nav active={active} landing={landing} />
     <main id="main" tabindex="-1">
       <slot />
     </main>

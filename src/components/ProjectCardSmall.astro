@@ -6,6 +6,7 @@ const { entry } = Astro.props; const d = entry.data;
 const href = `/cases/${entry.id}/`;
 ---
 <article class="small" data-accent={d.accent}>
+  {!d.draft && <a class="small__hit" href={href} tabindex="-1" aria-hidden="true"></a>}
   <div class="small__media">
     <Image class="small__img" src={d.keyVisual} alt="" widths={[400, 720, 864]} sizes="(max-width: 743px) 100vw, (max-width: 1023px) 50vw, 360px" style={`object-position:${d.focus}`} />
   </div>
@@ -24,15 +25,19 @@ const href = `/cases/${entry.id}/`;
   .small__body { display: grid; align-content: start; gap: var(--space-2); padding: var(--space-4); border-top: 1px solid var(--color-border-default); }
   .small__meta { margin: 0; color: #555566; }
   .small__title { margin: 0; font-weight: 700; font-size: 1.125rem; line-height: 1.444; letter-spacing: -0.005em; }
-  .small a { color: inherit; text-decoration: none; } .small a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
-  .small a:focus-visible { outline: none; }
+  .small a { color: inherit; text-decoration: none; }
+  .small__hit { position: absolute; inset: 0; z-index: 2; } /* whole card clickable; the title link stays the one focus stop */
+  .small__title a:focus-visible { outline: none; }
+  .small:has(.small__title a:focus-visible) { outline: 3px solid var(--accent-text); outline-offset: 3px; }
   .small__desc { margin: 0; font-size: 0.875rem; line-height: 1.714; color: #555566; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  /* Desktop + mouse: the card keeps its height on hover — the text panel slides up over the image
+     (image looks shorter, as in Figma) and reveals the description underneath. */
   @media (hover: hover) and (min-width: 1024px) {
-    .small__more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
-    .small__more > p { min-height: 0; }
+    .small__body { position: relative; z-index: 1; background: #fff; transition: transform .3s ease; }
+    .small__more { position: absolute; left: var(--space-4); right: var(--space-4); top: calc(100% - var(--space-2)); height: 3.5rem; opacity: 0; transition: opacity .25s ease; }
     .small:hover::after, .small:focus-within::after { opacity: 1; }
-    .small:hover .small__media, .small:focus-within .small__media { aspect-ratio: 432 / 185; }
-    .small:hover .small__more, .small:focus-within .small__more { grid-template-rows: 1fr; }
+    .small:hover .small__body, .small:focus-within .small__body { transform: translateY(-3.5rem); }
+    .small:hover .small__more, .small:focus-within .small__more { opacity: 1; }
   }
   @media (prefers-reduced-motion: reduce) { .small *, .small::after { transition: none !important; } }
 </style>

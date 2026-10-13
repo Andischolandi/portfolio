@@ -7,9 +7,9 @@ const d = entry.data;
 const href = `/cases/${entry.id}/`;
 ---
 <article class="card" data-theme="night" data-accent={d.accent}>
-  <div class="card__media">
-    <Image class="card__img" src={d.keyVisual} alt="" widths={[480, 660, 1000, 1320]} sizes="(max-width: 743px) 100vw, (max-width: 1440px) 50vw, 660px" style={`object-position:${d.focus}`} />
-  </div>
+  {d.draft
+    ? <div class="card__media"><Image class="card__img" src={d.keyVisual} alt="" widths={[480, 660, 1000, 1320]} sizes="(max-width: 743px) 100vw, (max-width: 1440px) 50vw, 660px" style={`object-position:${d.focus}`} /></div>
+    : <a class="card__media" href={href} tabindex="-1" aria-hidden="true"><Image class="card__img" src={d.keyVisual} alt="" widths={[480, 660, 1000, 1320]} sizes="(max-width: 743px) 100vw, (max-width: 1440px) 50vw, 660px" style={`object-position:${d.focus}`} /></a>}
   <div class="card__overlay">
     <p class="card__meta t-label-caps-small accent">{d.timeframe} · {d.company}</p>
     <H class="card__title">
@@ -28,17 +28,19 @@ const href = `/cases/${entry.id}/`;
   /* Figma: ProjectCard 660×460, radius 3, 3px accent line, overlay expands on hover (desktop) */
   .card { position: relative; border-radius: 3px; overflow: hidden; background: #161820; color: #fff; }
   .card::before { content: ''; position: absolute; z-index: 2; left: 0; right: 0; top: 0; height: 3px; background: var(--accent-fill); }
-  .card__media { position: relative; aspect-ratio: 660 / 460; overflow: hidden; background: #1a1a22; }
+  .card__media { position: relative; display: block; aspect-ratio: 660 / 460; overflow: hidden; background: #1a1a22; }
   .card :global(.card__img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
   .card__overlay { display: grid; gap: var(--space-3); padding: var(--space-4) var(--space-6) var(--space-6); }
   .card__meta { margin: 0; }
-  .card__title { margin: 0; font-weight: 700; font-size: 1.5rem; line-height: 1.333; letter-spacing: -0.01em; text-wrap: balance; }
+  .card__title { margin: 0; font-weight: 700; font-size: 1.5rem; line-height: 1.333; letter-spacing: -0.01em; text-wrap: pretty; }
   .card__link { color: inherit; text-decoration: none; }
   .card__link::after { content: ''; position: absolute; inset: 0; z-index: 3; } /* whole card clickable, one link for screen readers */
   .card__link:focus-visible { outline: none; }
   .card:has(.card__link:focus-visible) { outline: 3px solid var(--accent-fill); outline-offset: 3px; }
   .card__desc { margin: 0; font-size: 0.875rem; line-height: 1.714; color: #fff; }
-  .card__cta { margin: var(--space-3) 0 0; font-size: 0.6875rem; line-height: 18px; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,.76); }
+  .card__cta { margin: var(--space-3) 0 0; font-size: 0.6875rem; line-height: 18px; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,.76); transition: color .2s ease; }
+  /* Figma "ProjectCard CTA-<accent>": CTA takes the card's accent colour on hover */
+  .card:hover .card__cta, .card:focus-within .card__cta { color: var(--accent-text); }
 
   /* Desktop with a mouse: text sits on the image, overlay grows on hover */
   @media (hover: hover) and (min-width: 1024px) {

@@ -1,8 +1,8 @@
 ---
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-interface Props { title: string; tagline: string; kicker: string; tags: (string | { label: string; to: string })[]; image: ImageMetadata; alt: string; credit?: string; focus?: string; accent: string }
-const { title, tagline, kicker, tags, image, alt, credit, focus = 'center', accent } = Astro.props;
+interface Props { title: string; tagline: string; kicker: string; tags: (string | { label: string; to: string })[]; image: ImageMetadata; alt: string; credit?: string; focus?: string; accent: string; prev?: { href: string; title: string }; next?: { href: string; title: string } }
+const { title, tagline, kicker, tags, image, alt, credit, focus = 'center', accent, prev, next } = Astro.props;
 ---
 <header class="hero" data-theme="night" data-accent={accent}>
   <Picture class="hero__img" src={image} alt={alt} formats={["avif", "webp"]} fallbackFormat="jpg" widths={[480, 800, 1440, 2048]} sizes="100vw" style={`object-position:${focus}`} loading="eager" fetchpriority="high" />
@@ -13,7 +13,17 @@ const { title, tagline, kicker, tags, image, alt, credit, focus = 'center', acce
       ? <li class="tag t-ui-tag">{t}</li>
       : <li><a class="tag tag--link t-ui-tag" href={`#chapter-${t.to}`}>{t.label}</a></li>)}</ul>
   </div>
-  {credit && <p class="hero__credit t-body-caption">{credit}</p>}
+  {credit && <p class="hero__credit">{credit}</p>}
+  {prev && next && (
+    <nav class="hero__browse" aria-label="More case studies">
+      <a class="hero__nav hero__nav--prev btn-icon-overlay" href={prev.href} rel="prev" aria-label={`Previous case study: ${prev.title}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </a>
+      <a class="hero__nav hero__nav--next btn-icon-overlay" href={next.href} rel="next" aria-label={`Next case study: ${next.title}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </nav>
+  )}
 </header>
 <style>
   .hero { position: relative; min-height: min(680px, 80vh); display: grid; align-items: end; background: var(--color-bg-page); color: var(--color-text-primary); overflow: hidden; }
@@ -21,7 +31,11 @@ const { title, tagline, kicker, tags, image, alt, credit, focus = 'center', acce
   .hero :global(.hero__img) { object-fit: cover; }
   .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,17,23,0) 30%, rgba(15,17,23,.88) 100%); }
   .hero__text { position: relative; z-index: 1; display: grid; gap: var(--space-4); padding: var(--space-16) var(--layout-margin-content) var(--space-16); max-width: calc(1040px + 2 * var(--layout-margin-content)); }
-  .hero__credit { position: absolute; z-index: 1; right: var(--margin); bottom: var(--space-4); color: rgba(255,255,255,.8); text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+  /* image credit: small and quiet (caption size − 2px) */
+  .hero__credit { position: absolute; z-index: 1; right: var(--margin); bottom: var(--space-4); margin: 0; font-size: 0.6875rem; line-height: 1.4; letter-spacing: 0.02em; color: rgba(255,255,255,.55); text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+  /* Browse case studies (wraps around) — same round overlay buttons as the lightbox */
+  .hero__nav { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); }
+  .hero__nav--prev { left: var(--space-4); } .hero__nav--next { right: var(--space-4); }
   h1 .accent { display: block; }
   .tag--link { text-decoration: none; transition: transform .15s, box-shadow .15s; }
   .tag--link::after { content: ' ↓'; }
@@ -32,6 +46,8 @@ const { title, tagline, kicker, tags, image, alt, credit, focus = 'center', acce
     .hero :global(picture), .hero :global(.hero__img) { position: relative; inset: auto; aspect-ratio: 4 / 3; height: auto; }
     .hero::after { display: none; }
     .hero__text { padding: var(--space-8) var(--margin) var(--space-10, 40px); }
-    .hero__credit { top: calc(100vw * 0.75 - 32px); bottom: auto; }
+    .hero__credit { top: calc(100vw * 0.75 - 28px); bottom: auto; }
+    .hero__nav { top: calc(100vw * 0.375); }
+    .hero__nav--prev { left: var(--space-2); } .hero__nav--next { right: var(--space-2); }
   }
 </style>

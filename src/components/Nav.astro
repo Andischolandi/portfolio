@@ -1,13 +1,13 @@
 ---
-interface Props { active?: string | null }
-const { active } = Astro.props;
+interface Props { active?: string | null; landing?: boolean }
+const { active, landing = false } = Astro.props;
 const links = [
   { href: '/projects/', label: 'Projects & Case Studies', key: 'projects' },
   { href: '/about/', label: 'About me', key: 'about' },
   { href: '/contact/', label: 'Contact', key: 'contact' },
 ];
 ---
-<header class="nav" data-theme="warm-white">
+<header class:list={["nav", { "nav--landing": landing }]} data-theme="warm-white">
   <a class="nav__logo t-ui-nav-logo" href="/">Andreas Schwankl</a>
   <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
     <span class="visually-hidden">Menu</span>
@@ -37,12 +37,17 @@ const links = [
   .nav {
     position: sticky; top: 0; z-index: 50;
     display: flex; align-items: center; justify-content: space-between;
-    min-height: 64px; padding-inline: var(--margin);
+    min-height: 64px;
+    /* logo and links sit on the content area edges of the page grid (1120px), not the screen edge */
+    padding-inline: max(var(--margin), calc((100% - var(--content)) / 2));
     background: color-mix(in srgb, var(--color-bg-page) 93%, transparent);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--color-border-default);
   }
   .nav__logo { text-decoration: none; }
+  /* Landing (Figma): name a size bigger, bar fades from the hero's sand (left) into the warm white bar (right) */
+  .nav--landing { background: linear-gradient(90deg, #cac6bc 0%, color-mix(in srgb, #f5f4f0 93%, transparent) 100%); }
+  .nav--landing .nav__logo { font-size: 1.375rem; line-height: 1.27; }
   .nav__menu ul { display: flex; gap: var(--space-8); list-style: none; margin: 0; padding: 0; }
   .nav__menu a { text-decoration: none; color: var(--color-text-secondary); padding-block: 6px; border-bottom: 2px solid transparent; }
   .nav__menu a:hover { color: var(--color-text-primary); border-bottom-color: color-mix(in srgb, var(--color-text-primary) 40%, transparent); }
@@ -50,6 +55,7 @@ const links = [
   .nav__toggle { display: none; }
   @media (max-width: 743px) {
     .nav { min-height: 56px; }
+    .nav--landing .nav__logo { font-size: 1.0625rem; }
     .nav__toggle { display: grid; place-items: center; width: 44px; height: 44px; margin-right: -10px; background: none; border: 0; color: var(--color-text-primary); cursor: pointer; }
     .nav__bars, .nav__bars::before, .nav__bars::after { display: block; width: 22px; height: 2px; background: currentColor; position: relative; content: ''; }
     .nav__bars::before { position: absolute; top: -7px; } .nav__bars::after { position: absolute; top: 7px; }

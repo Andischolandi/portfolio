@@ -6,16 +6,23 @@ import MetaStrip from '../../components/MetaStrip.astro';
 import ContactTeaser from '../../components/ContactTeaser.astro';
 
 export async function getStaticPaths() {
-  const cases = await getCollection('cases', (c) => !c.data.hidden);
-  return cases.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  const rank = (c) => (c.data.section === 'latest' ? 0 : 1) * 100 + c.data.order;
+  const cases = (await getCollection('cases', (c) => !c.data.hidden && !c.data.draft)).sort((a, b) => rank(a) - rank(b));
+  // previous / next case study, wrapping around (first ↔ last)
+  return cases.map((entry, i) => {
+    const prev = cases[(i - 1 + cases.length) % cases.length];
+    const next = cases[(i + 1) % cases.length];
+    const link = (c) => ({ href: `/cases/${c.id}/`, title: `${c.data.title} ${c.data.tagline}` });
+    return { params: { slug: entry.id }, props: { entry, prev: link(prev), next: link(next) } };
+  });
 }
-const { entry } = Astro.props;
+const { entry, prev, next } = Astro.props;
 const d = entry.data;
 const { Content } = await render(entry);
 ---
 <Base title={`${d.title} ${d.tagline} — Andreas Schwankl`} description={d.summary ?? d.teaser} active="projects">
-  <CaseHero title={d.title} tagline={d.tagline} kicker={`Case study · ${d.company.split('/')[0].trim()}`} tags={d.tags} image={d.keyVisual} alt={d.keyVisualAlt} credit={d.keyVisualCredit} focus={d.focus} accent={d.accent} />
-  <MetaStrip items={[["Company", d.company], ["Year", d.timeframe], ["Role", d.role], ["Platforms", d.platforms], ["Partners", d.partners], ["Standard", d.standard]]} />
+  <CaseHero title={d.title} tagline={d.tagline} kicker={`Case study · ${d.company.split('/')[0].trim()}`} tags={d.tags} image={d.keyVisual} alt={d.keyVisualAlt} credit={d.keyVisualCredit} focus={d.focus} accent={d.accent} prev={prev} next={next} />
+  <MetaStrip items={[["Company", d.company], ["Year", d.timeframe], ["Platforms", d.platforms], ["Partners", d.partners], ["Standard", d.standard], ["Key outcome", d.keyOutcome]]} />
   <div data-accent={d.accent}>
   {d.draft ? (
     <section class="section"><p class="t-body-large text-secondary">This case study is being written. Check back soon — or <a href="/contact/">get in touch</a> and I'll walk you through it.</p></section>

@@ -11,11 +11,12 @@ const latest = (await getCollection('cases', (c) => !c.data.hidden && c.data.sec
 const cv = '/cv/CV_Andreas-Schwankl_2026-10_eng.pdf';
 const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/deation, Cornelsen and Seven.One Entertainment Group';
 ---
-<Base title="Andreas Schwankl — Product Design Director" description="Andreas Schwankl — Product Design Director in Berlin. Design and research leadership for digital products, from first insight to lasting practice.">
+<Base landing title="Andreas Schwankl — Product Design Director" description="Andreas Schwankl — Product Design Director in Berlin. Design and research leadership for digital products, from first insight to lasting practice.">
   <section class="section home-hero" data-theme="sand" aria-labelledby="hero-title">
-    <div class="home-hero__grid is-content">
+    <p class="visually-hidden">Welcome to the portfolio of Andreas Schwankl. This page gives you an overview of, and access to, some of the projects and case studies Andreas has worked on in recent years. The main navigation is at the top of the page. Further down you will find a short introduction, case studies and latest projects, the clients and employers he has worked for, his design philosophy, and how to get in touch.</p>
+    <div class="home-hero__grid is-wide">
       <div class="home-hero__text">
-        <p class="t-label-caps-small">Product Design Director · <span class="t-script hands-on">Hands-on</span> · Berlin</p>
+        <p class="t-label-caps-small">Product Design Director<span aria-hidden="true"> · </span><span class="visually-hidden">, </span><span class="t-script hands-on">Hands-on</span><span aria-hidden="true"> · </span><span class="visually-hidden">, </span>Berlin</p>
         <h1 id="hero-title" class="t-display-hero">Design impactful <span class="t-script home-hero__script">experiences</span> through insight.</h1>
         <p class="t-body-large text-secondary">15+ years turning complex product challenges into clear direction — and leading design and research teams to experiences that last.</p>
         <p class="home-hero__ctas">
@@ -34,7 +35,8 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
     <h2 id="latest-title" class="t-section-title is-content"><span class="t-highlight">Case studies &amp; latest projects</span></h2>
     <div class="grid-2 is-wide">{latest.map((e) => <ProjectCard entry={e} />)}</div>
     <p class="home-work__all is-content"><a class="btn btn--primary t-ui-button" href="/projects/">Case Studies · View all <span aria-hidden="true">→</span></a></p>
-    <figure class="clients is-wide">
+    <h2 id="clients-title" class="visually-hidden">Clients and employers</h2>
+    <figure class="clients is-wide" aria-labelledby="clients-title">
       <picture>
         <source media="(max-width: 743px)" srcset={logosMobile.src} width={logosMobile.width} height={logosMobile.height} />
         <img src={logos.src} width={logos.width} height={logos.height} alt={`Clients I have worked for, in order: ${clients}.`} draggable="false" loading="lazy" decoding="async" />
@@ -53,13 +55,17 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
   <ContactTeaser headline="Got a challenge that needs design expertise?" />
 </Base>
 <style>
-  .home-hero { padding-block: var(--space-16) 0; overflow: hidden; }
-  .home-hero__grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: var(--space-8); align-items: end; }
-  .home-hero__text { display: grid; gap: var(--space-6); align-self: center; padding-bottom: var(--space-16); }
+  .home-hero { padding-block: var(--space-4) 0; overflow: hidden; }
+  /* Grid spans the wide column so the portrait's right edge lines up with the right project card below;
+     the text keeps starting on the content edge (inset = half the difference between wide and content). */
+  .home-hero__grid { --inset: calc((var(--wide) - var(--content)) / 2); display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: var(--space-8); align-items: end; padding-left: var(--inset); }
+  .home-hero__text { display: grid; gap: var(--space-6); align-self: start; padding-bottom: var(--space-16); }
+  .home-hero__text h1 { margin-top: var(--space-20, 80px); }
   .home-hero__text > * { margin: 0; }
   .home-hero__text .t-body-large { max-width: 34em; }
   .hands-on { text-transform: uppercase; letter-spacing: 0.08em; font-size: 1.1em; }
-  .home-hero__script { display: block; text-transform: uppercase; letter-spacing: 0.01em; }
+  /* Kalam sits high on its line box; tighten the box and drop the word onto the Inter baseline rhythm */
+  .home-hero__script { display: block; text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.9; padding-top: 0.19em; margin-bottom: -0.03em; }
   .home-hero__ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); }
   .home-hero__portrait { align-self: end; justify-self: end; width: min(100%, 511px); }
   .home-hero__portrait :global(img) { display: block; width: 100%; height: auto; }
@@ -74,15 +80,17 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
   .home-quote__link { color: var(--accent-text, var(--color-accent-green-text)); text-decoration: none; }
   .home-quote__link:hover { text-decoration: underline; }
   @media (max-width: 1023px) {
-    .home-hero__grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-6); }
+    .home-hero__grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-6); padding-left: 0; }
     .home-hero__text { padding-bottom: var(--space-12); }
+    .home-hero__text h1 { margin-top: var(--space-16); }
   }
   @media (max-width: 743px) {
     .clients img { max-width: 420px; margin-inline: auto; }
-    .home-hero { padding-top: var(--space-10, 40px); }
+    .home-hero { padding-top: var(--space-4); }
+    .home-hero__text h1 { margin-top: var(--space-12); }
     .home-hero__grid { grid-template-columns: 1fr; gap: 0; }
     .home-hero__text { padding-bottom: var(--space-8); }
-    .home-hero__portrait { width: min(78%, 360px); justify-self: center; }
+    .home-hero__portrait { width: min(78%, 360px); justify-self: end; }
     .grid-2 { grid-template-columns: 1fr; }
     .clients { margin-top: var(--space-8); }
   }

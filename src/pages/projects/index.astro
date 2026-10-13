@@ -9,7 +9,8 @@ const latest = all.filter((c) => c.data.section === 'latest');
 const older = all.filter((c) => c.data.section === 'older');
 ---
 <Base title="Projects & Case Studies — Andreas Schwankl" active="projects">
-  <section class="section">
+  <section class="section page-head projects-head">
+    <p class="visually-hidden">This page lists case studies by Andreas Schwankl: first the latest projects, then older cases and projects, followed by a way to get in touch.</p>
     <p class="t-label-caps-small text-muted">Selected work</p>
     <h1 class="t-display-h1 is-content">Projects & Case Studies</h1>
     <p class="t-body-large text-secondary">A curated selection of projects spanning product design, strategy and team leadership.</p>
@@ -20,8 +21,8 @@ const older = all.filter((c) => c.data.section === 'older');
   </section>
   {older.length > 0 && (
     <section class="section" aria-labelledby="older-title">
-      <h2 id="older-title" class="t-section-title is-content"><span class="t-highlight">Case studies &amp; projects · Older</span></h2>
-      <div class="grid-3 is-content">{older.map((e) => <ProjectCardSmall entry={e} />)}</div>
+      <h2 id="older-title" class="t-section-title is-content"><span class="t-highlight">Older cases and projects</span></h2>
+      <div class="grid-3 is-wide">{older.map((e) => <ProjectCardSmall entry={e} />)}</div>
     </section>
   )}
   <ContactTeaser headline="Got a challenge that needs design direction?" />

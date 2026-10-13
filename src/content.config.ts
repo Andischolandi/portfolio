@@ -23,6 +23,7 @@ const cases = defineCollection({
       tags: z.array(z.union([z.string(), z.object({ label: z.string(), to: z.string() })])).default([]),
       teaser: z.string(),                    // short description for cards
       summary: z.string().optional(),        // longer teaser, used as page meta description
+      keyOutcome: z.string().optional(),       // last item of the project facts strip
       keyVisual: image(),
       keyVisualAlt: z.string(),
       keyVisualCredit: z.string().optional(),

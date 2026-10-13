@@ -77,6 +77,8 @@ a:hover { text-decoration-thickness: 2px; }
 .section > .is-wide { grid-column: wide; }
 .section > .is-full { grid-column: full; }
 .section--ruled { border-top: 1px solid var(--color-border-default); }
+/* First section of a page: the kicker/page label sits close under the navigation bar (same as the landing hero) */
+.section.page-head { padding-top: var(--space-6); }
 
 .stack > * + * { margin-top: var(--space-4); }
 .kicker { color: var(--color-accent-green-text); }
@@ -116,7 +118,11 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .btn--primary { background: var(--color-bg-inverse); color: var(--color-text-inverse); }
 .btn--secondary { border-color: var(--color-border-strong); color: var(--color-text-primary); background: transparent; }
-.btn:hover { filter: brightness(1.12); }
+.btn { transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
+/* Design system "Button": hover primary #1a1a22 → #4e4e5a, secondary transparent → #dfdfdf (theme-aware mixes) */
+.btn--primary:hover { background: color-mix(in srgb, var(--color-bg-inverse) 74%, #ffffff); }
+.btn--secondary:hover { background: color-mix(in srgb, var(--color-text-primary) 11%, transparent); border-color: var(--color-text-primary); }
+.btn:active { filter: brightness(.94); }
 /* Icon button – overlay: round, dark translucent, white icon. Floats on top of imagery (lightbox controls). */
 .btn-icon-overlay { display: inline-grid; place-items: center; width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%;
   background: rgba(15,17,23,.75); color: #fff; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
