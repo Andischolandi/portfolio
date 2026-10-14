@@ -3,31 +3,38 @@ import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import ContactTeaser from '../../components/ContactTeaser.astro';
 import portrait from '../../assets/profile/profile-about.png';
+import type { ImageMetadata } from 'astro';
 const cv = '/cv/CV_Andreas-Schwankl_2026-10_eng.pdf';
-const skills = ['Strategy', 'Research', 'Leadership', 'Systems Thinking', 'Experience Management'];
-const values = [
-  { t: 'Human-Centered Design', d: 'Every decision starts with real people — their needs, behaviours and barriers. I bring user evidence into rooms where it is usually missing.', c: 'pink' },
-  { t: 'Clarity Over Complexity', d: 'I turn overwhelming findings into a few clear priorities that teams can act on.', c: 'blue' },
-  { t: 'Collaborative Leadership', d: 'Great outcomes need shared ownership. I build alliances across product, engineering, editorial and leadership.', c: 'violet' },
-  { t: 'Iterative Excellence', d: 'Perfect is the enemy of progress. I believe in launching, learning, and iterating quickly while maintaining high standards for craft and quality.', c: 'yellow' },
-  { t: 'Ethical Responsibility', d: 'Design has power and responsibility. I advocate for inclusive, accessible experiences that work for everyone.', c: 'green' },
-  { t: 'Strategic Thinking', d: 'Design decisions must serve users and the business. I connect them to roadmaps, costs and long-term goals.', c: 'blue' },
+// Hero pills jump to the sections below
+const jumps = [
+  { label: 'Values & Principles', href: '#values' },
+  { label: 'Design Approach', href: '#approach' },
+  { label: 'Experience', href: '#experience' },
 ];
-// Line illustrations for the value cards (viewBox 160×100, drawn in the card's accent colour)
-const svg = (inner) => `<svg viewBox="0 0 160 100" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
-const visuals = {
-  'Human-Centered Design': svg('<circle cx="80" cy="34" r="14"/><path d="M52 86c2-16 14-26 28-26s26 10 28 26"/><path d="M118 30c0-5 4-8 8-8s7 4 7 7c0 7-11 13-11 13s-11-6-11-13c0-3 3-7 7-7z" stroke-width="2.5"/><path d="M30 46h12M24 58h14" opacity=".5"/>'),
-  'Clarity Over Complexity': svg('<path d="M18 50c6-22 22 18 30-6s-20-20-10 6 26 10 18-14-22 4-12 22 20-2 14-16" opacity=".55"/><path d="M78 50h52"/><path d="M120 40l12 10-12 10"/><circle cx="142" cy="50" r="5" fill="currentColor"/>'),
-  'Collaborative Leadership': svg('<circle cx="80" cy="26" r="10"/><circle cx="44" cy="70" r="10"/><circle cx="116" cy="70" r="10"/><path d="M74 35L50 61M86 35l24 26M54 70h52"/><circle cx="80" cy="56" r="4" fill="currentColor"/>'),
-  'Iterative Excellence': svg('<path d="M58 70a24 24 0 1 1 8 10"/><path d="M52 62l6 9 9-5"/><path d="M104 74l12-14 10 8 16-22"/><path d="M134 46h8v8"/>'),
-  'Ethical Responsibility': svg('<path d="M80 14l30 10v22c0 20-14 34-30 40-16-6-30-20-30-40V24z"/><path d="M66 50l10 10 20-22"/>'),
-  'Strategic Thinking': svg('<circle cx="80" cy="50" r="34"/><circle cx="80" cy="50" r="20" opacity=".55"/><circle cx="80" cy="50" r="5" fill="currentColor"/><path d="M128 18L84 46"/><path d="M118 16l10 2-2 10"/>'),
-};
+// Values & Principles — tarot cards (front: illustration, back: the principle)
+const cards = import.meta.glob<{ default: ImageMetadata }>('../../content/cases/illustrations/card-*.png', { eager: true });
+const card = (slug: string, side: 'front' | 'back') => cards[`../../content/cases/illustrations/card-${slug}-${side}.png`].default;
+const values = [
+  { n: 'I', name: 'The Listener', slug: '1-listener', t: 'Human-Centered Design', d: 'Every decision starts with real people — their needs, behaviours and barriers. I bring user evidence into rooms where it is usually missing.' },
+  { n: 'II', name: 'The Clarifier', slug: '2-clarifier', t: 'Clarity Over Complexity', d: 'I turn overwhelming findings into a few clear priorities that teams can act on.' },
+  { n: 'III', name: 'The Alliance', slug: '3-alliance', t: 'Collaborative Leadership', d: 'Great outcomes need shared ownership. I build alliances across product, engineering, editorial and leadership.' },
+  { n: 'IV', name: 'The Alchemist', slug: '4-alchemist', t: 'Iterative Excellence', d: 'Perfect is the enemy of progress. I believe in launching, learning, and iterating quickly while maintaining high standards for craft and quality.' },
+  { n: 'V', name: 'The Guardian', slug: '5-guardian', t: 'Ethical Responsibility', d: 'Design has power and responsibility. I advocate for inclusive, accessible experiences that work for everyone.' },
+  { n: 'VI', name: 'The Navigator', slug: '6-navigator', t: 'Strategic Thinking', d: 'Design decisions must serve users and the business. I connect them to roadmaps, costs and long-term goals.' },
+];
+// Design approach — each step links to the case studies where it shows
+const ITV = { label: 'Interactive TV', accent: 'pink' };
+const A11Y = { label: 'Accessibility', accent: 'green' };
+const UMA = { label: 'Cornelsen', accent: 'archive-violet' };
 const approach = [
-  { t: 'Discover & Understand', d: 'Deep user research, stakeholder interviews and competitive analysis to uncover the real problem at hand.', case: 'Interactive TV', href: '/cases/interactive-tv/#chapter-04', ch: '04 · We understood participation data – but not the fans behind it' },
-  { t: 'Define & Strategize', d: 'Transform insights into clear problem statements, strategic alliances and design principles that guide all subsequent decisions.', case: 'Cornelsen', href: '/cases/cornelsen-uma/#chapter-06', ch: '06 · Evidence clusters revealed the broken key moments' },
-  { t: 'Design & Prototype', d: 'Rapid ideation, prototyping, and testing to validate concepts before investing in full development.', case: 'Interactive TV', href: '/cases/interactive-tv/#chapter-08', ch: '08 · “One tap away”' },
-  { t: 'Deliver & Iterate', d: 'Ship with confidence, measure impact, and continuously improve based on real user feedback and data.', case: 'Cornelsen', href: '/cases/cornelsen-uma/#chapter-09', ch: '09 · From static campaign page to evolving product story' },
+  { t: 'Discover & Understand', d: 'Deep user research, stakeholder interviews and competitive analysis to uncover the real problem at hand.',
+    cases: [{ ...ITV, href: '/cases/interactive-tv/#chapter-04' }, { ...A11Y, href: '/cases/a11y/#chapter-04' }] },
+  { t: 'Define & Strategize', d: 'Transform insights into clear problem statements, strategic alliances and design principles that guide all subsequent decisions.',
+    cases: [{ ...A11Y, href: '/cases/a11y/#chapter-06' }, { ...UMA, href: '/cases/cornelsen-uma/#chapter-06' }] },
+  { t: 'Design & Prototype', d: 'Rapid ideation, prototyping, and testing to validate concepts before investing in full development.',
+    cases: [{ ...ITV, href: '/cases/interactive-tv/#chapter-08' }] },
+  { t: 'Deliver, Learn & Iterate', d: 'Ship with confidence, measure impact, and continuously improve based on real user feedback and data.',
+    cases: [{ ...UMA, href: '/cases/cornelsen-uma/#chapter-09' }] },
 ];
 const experience = [
   { y: '2021–2025', co: 'JOYN / SevenOne / ProSiebenSat.1', role: 'VP UX Design & Research', d: 'Led UX Design and Research for one of Germany’s largest streaming platforms, driving user growth, engagement, and content discovery across web, mobile, and TV.' },
@@ -40,11 +47,11 @@ const experience = [
   <section class="section page-head about-hero" data-theme="earth" aria-labelledby="about-title">
     <div class="about-hero__grid is-content">
       <div class="about-hero__text">
-        <p class="t-label-caps-small text-muted">About</p>
-        <h1 id="about-title" class="t-display-h1">Product Design Director <span class="t-script about-hero__script">Design + Research</span></h1>
-        <p class="t-body-large text-secondary">I turn complex product challenges into clear, shared direction — and into experiences that last.<br />For 15+ years I have led design teams and since recently also research, from early concepts to products used by millions, in streaming media, social location, e-commerce and digital education.</p>
-        <p class="t-body-default text-secondary">My work starts with understanding people and ends when new ways of working are embedded in the organisation: from accessibility programmes and interactive TV to customer journey management.</p>
-        <ul class="tags" aria-label="Focus areas">{skills.map((s) => <li class="chip t-ui-tag">{s}</li>)}</ul>
+        <p class="t-label-caps-small text-muted">About me</p>
+        <h1 id="about-title" class="t-display-h1">Product <span class="t-script about-hero__script">Design + Research</span><br />Director</h1>
+        <p class="t-body-large text-secondary">For 15+ years I have led design teams and since JOYN also a research team. I have built products from early concepts to releases used by millions, in streaming media, social location, e-commerce and digital education.</p>
+        <p class="t-body-default text-secondary">My work starts with understanding people and context and it becomes especially interesting for me when new ways of working are getting embedded in an organisation.</p>
+        <ul class="tags" aria-label="Jump to a section">{jumps.map((j) => <li><a class="tag tag--link t-ui-tag" href={j.href}>{j.label}</a></li>)}</ul>
       </div>
       <div class="about-hero__portrait">
         <Image src={portrait} alt="Illustrated portrait of Andreas Schwankl in a beanie and a sweater with a planet earth print, a small fish peeking over his shoulder." widths={[300, 450, 742]} sizes="(max-width: 743px) 70vw, 340px" loading="eager" />
@@ -62,44 +69,45 @@ const experience = [
   <section class="section about-values" data-theme="sand" id="values" aria-labelledby="values-title">
     <div class="about-center is-content">
       <h2 id="values-title" class="t-display-h2">Values &amp; Principles</h2>
-      <p class="t-body-default text-secondary">These principles have shaped how I design, how I lead teams and how I approach complex challenges.</p>
+      <p class="t-body-default text-secondary">These principles have shaped how I design, how I lead teams and how I approach complex challenges. <span class="cards-hint cards-hint--hover">Hover over a card to turn it.</span><span class="cards-hint cards-hint--tap">Tap a card to turn it.</span></p>
     </div>
-    <ul class="values is-content">
-      {values.map((v) => (
-        <li class="value" data-accent={v.c}>
-          <div class="value__visual" aria-hidden="true"><Fragment set:html={visuals[v.t]} /></div>
-          <div class="value__text">
-            <h3 class="t-heading-h4">{v.t}</h3>
-            <p class="t-body-small text-secondary">{v.d}</p>
-          </div>
+    <ul class="tarot-deck is-content" data-deck>
+      {values.map((v, i) => (
+        <li class="tarot-slot" style={`--i:${i}`}>
+          <h3 class="visually-hidden">{v.t} — card {v.n}, {v.name}</h3>
+          <p class="visually-hidden">{v.d}</p>
+          <button class="tarot" type="button" aria-pressed="false" aria-label={`Turn card ${v.n}: ${v.name}`}>
+            <span class="tarot__inner">
+              <span class="tarot__face tarot__face--front"><Image src={card(v.slug, 'front')} alt="" widths={[300, 440, 640]} sizes="(max-width: 743px) 72vw, (max-width: 1023px) 40vw, 360px" /></span>
+              <span class="tarot__face tarot__face--back"><Image src={card(v.slug, 'back')} alt="" widths={[300, 440, 640]} sizes="(max-width: 743px) 72vw, (max-width: 1023px) 40vw, 360px" /></span>
+            </span>
+          </button>
         </li>
       ))}
     </ul>
   </section>
 
-  <section class="section about-approach" data-theme="sand" aria-labelledby="approach-title">
+  <section class="section about-approach" data-theme="sand" id="approach" aria-labelledby="approach-title">
+    <h2 id="approach-title" class="t-display-h2 is-content">My Design Approach</h2>
     <div class="approach is-content">
-      <div>
-        <h2 id="approach-title" class="t-display-h2">My Design Approach</h2>
-        <ol class="steps">
-          {approach.map((s) => (
-            <li class="step">
-              <h3 class="t-heading-h4">{s.t}</h3>
-              <p class="t-body-small text-secondary">{s.d}</p>
-              <p class="step__case t-body-caption"><span class="text-muted">See it in practice:</span> <a href={s.href}>{s.case} · {s.ch}</a></p>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <aside class="approach__card" aria-label="User-Centered Process">
-        <span class="approach__icon" aria-hidden="true"><span></span></span>
-        <p class="t-heading-h4">User-Centered Process</p>
-        <p class="t-body-small text-secondary">Every step of my process is anchored in understanding and serving real human needs.</p>
-      </aside>
+      <svg class="approach__diamonds" viewBox="0 0 200 560" preserveAspectRatio="none" aria-hidden="true"><path d="M100 0L200 140L100 280L0 140Z M100 280L200 420L100 560L0 420Z"/></svg>
+      <ol class="steps" data-steps>
+        {approach.map((s) => (
+          <li class="step">
+            <div class="step__head">
+              <h3 class="step__title"><span class="t-highlight">{s.t}</span></h3>
+              <ul class="step__cases" aria-label="See it in practice">
+                {s.cases.map((c) => <li><a class="case-pill t-ui-tag" data-accent={c.accent} href={c.href}>{c.label}<span class="visually-hidden"> case study</span></a></li>)}
+              </ul>
+            </div>
+            <p class="step__desc"><span class="t-highlight">{s.d}</span></p>
+          </li>
+        ))}
+      </ol>
     </div>
   </section>
 
-  <section class="section about-exp" aria-labelledby="exp-title">
+  <section class="section about-exp" id="experience" aria-labelledby="exp-title">
     <div class="exp is-content">
       <div class="exp__head">
         <h2 id="exp-title" class="t-display-h2">Experience</h2>
@@ -125,10 +133,13 @@ const experience = [
   .about-hero__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-8); align-items: end; }
   .about-hero__text { display: grid; gap: var(--space-4); align-self: start; padding-bottom: var(--space-16); }
   .about-hero__text > * { margin: 0; }
-  .about-hero__script { display: block; text-transform: uppercase; font-size: 0.86em; color: var(--color-accent-green-text); }
-  .chip { border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); padding: 4px 12px; color: var(--color-text-secondary); }
+  .about-hero__script { text-transform: uppercase; font-size: 0.86em; color: var(--color-accent-green-text); white-space: nowrap; }
   .about-hero__portrait { justify-self: center; width: min(100%, 340px); }
   .about-hero__portrait :global(img) { display: block; width: 100%; height: auto; }
+  .tags { margin: var(--space-2) 0 0; }
+  .tag--link { text-decoration: none; transition: transform .15s, box-shadow .15s; }
+  .tag--link::after { content: ' ↓'; }
+  .tag--link:hover { transform: translateY(-1px); box-shadow: 0 0 0 2px var(--color-text-primary); }
 
   .about-quote { background: var(--color-bg-emphasis); color: #fff; }
   .about-quote__inner { margin: 0 auto; max-width: 820px; text-align: center; display: grid; gap: var(--space-4); }
@@ -137,33 +148,61 @@ const experience = [
 
   .about-center { text-align: center; max-width: 640px; margin-inline: auto; display: grid; gap: var(--space-4); }
   .about-center > * { margin: 0; }
-  /* Value cards — like a hand of playing cards: visual on top, title, one short description */
+
+  /* ── Values & Principles: tarot deck ─────────────────────────── */
   .about-values { row-gap: var(--space-12); }
-  .values { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
-  .value { display: grid; grid-template-rows: auto 1fr; background: #fff; border: 1px solid var(--color-border-default); border-radius: 14px; overflow: hidden;
-    box-shadow: 0 1px 2px rgba(26,26,34,.06), 0 8px 24px -12px rgba(26,26,34,.18); transition: transform .2s ease, box-shadow .2s ease; }
-  .value:hover { transform: translateY(-3px) rotate(-.4deg); box-shadow: 0 2px 4px rgba(26,26,34,.08), 0 16px 32px -14px rgba(26,26,34,.28); }
-  .value__visual { aspect-ratio: 16 / 9; display: grid; place-items: center; color: var(--accent-text); border-bottom: 3px solid var(--accent-fill);
-    background: color-mix(in srgb, var(--accent-fill) 14%, #fff); }
-  .value__visual :global(svg) { width: 62%; height: auto; }
-  .value__text { display: grid; gap: var(--space-2); align-content: start; padding: var(--space-5, 20px) var(--space-6) var(--space-6); }
-  .value__text > * { margin: 0; }
-  @media (max-width: 1023px) { .values { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 743px) { .values { grid-template-columns: 1fr; } .value__visual { aspect-ratio: 2 / 1; } }
-  @media (prefers-reduced-motion: reduce) { .value { transition: none; } .value:hover { transform: none; } }
-  .approach__icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; background: var(--color-bg-surface); margin-bottom: var(--space-2); }
+  .cards-hint { display: block; margin-top: var(--space-2); font-weight: 600; color: var(--color-text-primary); }
+  .cards-hint--hover { display: none; }
+  @media (hover: hover) and (pointer: fine) { .cards-hint--hover { display: block; } .cards-hint--tap { display: none; } }
 
-  .approach { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-12); align-items: start; }
-  .steps { list-style: none; margin: var(--space-6) 0 0; padding: 0; border-top: 1px solid var(--color-border-strong); }
-  .step { display: grid; gap: var(--space-1, 4px); padding: var(--space-4) 0; border-bottom: 1px solid var(--color-border-strong); }
+  .tarot-deck { list-style: none; margin: 0 auto; padding: 0; width: 100%; max-width: 1000px;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-10, 40px) var(--space-8); }
+  .tarot-slot { position: relative; --tilt: 0deg; }
+  .tarot-slot:nth-child(3n+1) { --tilt: -1.2deg; }
+  .tarot-slot:nth-child(3n+3) { --tilt: 1deg; }
+  .tarot { all: unset; display: block; width: 100%; aspect-ratio: 2 / 3; cursor: pointer; perspective: 1400px; border-radius: 16px;
+    transform: rotate(var(--tilt)); transition: transform .35s ease; -webkit-tap-highlight-color: transparent; }
+  .tarot:focus-visible { outline: 3px solid var(--color-text-primary); outline-offset: 6px; }
+  .tarot__inner { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d;
+    transition: transform .7s cubic-bezier(.3, .7, .25, 1); }
+  .tarot__face { position: absolute; inset: 0; border-radius: 16px; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    background: #f8f4e8; border: 1px solid rgba(26,26,34,.14);
+    box-shadow: 0 1px 2px rgba(26,26,34,.10), 0 18px 36px -18px rgba(26,26,34,.45); }
+  .tarot__face :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .tarot__face--back { transform: rotateY(180deg); }
+  .tarot[aria-pressed="true"] .tarot__inner { transform: rotateY(180deg); }
+  @media (hover: hover) and (pointer: fine) {
+    .tarot:hover { transform: rotate(0deg) translateY(-6px); }
+    .tarot:hover .tarot__inner { transform: rotateY(180deg); }
+    .tarot[aria-pressed="true"]:hover .tarot__inner { transform: rotateY(180deg); }
+  }
+
+  /* Deal-in: cards slide in like being laid onto the table (only with JS) */
+  .tarot-deck[data-anim] .tarot-slot { opacity: 0; transform: translate(-30px, -50px) rotate(-10deg) scale(.92);
+    transition: opacity .5s ease, transform .8s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i) * 110ms); }
+  .tarot-deck[data-anim].is-dealt .tarot-slot { opacity: 1; transform: none; }
+
+  /* ── Design approach ─────────────────────────────────────────── */
+  .about-approach { overflow: hidden; }
+  .approach { position: relative; padding-left: 220px; margin-top: var(--space-4); }
+  .approach { isolation: isolate; }
+  .approach__diamonds { position: absolute; z-index: 0; left: 0; top: 0; width: 170px; height: 100%; fill: #e4e1d8; pointer-events: none; }
+  .steps { position: relative; z-index: 1; list-style: none; margin: 0; padding: 0; display: grid; }
+  .step { display: grid; gap: var(--space-3); align-content: center; min-height: 140px; padding: var(--space-4) 0; }
   .step > * { margin: 0; }
-  .step__case a { color: var(--color-text-primary); text-underline-offset: 3px; }
-  .approach__card { display: grid; justify-items: center; text-align: center; gap: var(--space-3); padding: var(--space-12) var(--space-8); border-radius: var(--radius-lg); background: #e8f5ee; color: #1a1a22; border: 1px solid #cfe6da; margin-top: var(--space-12); }
-  .approach__card > p { margin: 0; }
-  .approach__card .text-secondary { color: #4a4a58; }
-  .approach__icon { width: 48px; height: 48px; background: var(--color-accent-green-fill); border-radius: 12px; }
-  .approach__icon span { width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+  .step__head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); }
+  .step__title { margin: 0; font-size: 1.375rem; line-height: 1.55; font-weight: 700; }
+  .step__desc { max-width: 640px; font-size: 1rem; line-height: 1.95; }
+  .step__cases { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .case-pill { display: inline-block; padding: 4px 12px; border-radius: var(--radius-pill); text-decoration: none;
+    background: var(--accent-fill); color: var(--accent-on, var(--color-text-on-accent)); transition: transform .15s, box-shadow .15s; }
+  .case-pill::after { content: ' →'; }
+  .case-pill:hover { transform: translateY(-1px); box-shadow: 0 0 0 2px var(--color-text-primary); }
 
+  .steps[data-anim] .step { opacity: 0; transform: translateX(56px); transition: opacity .6s ease, transform .7s cubic-bezier(.2, .8, .2, 1); }
+  .steps[data-anim] .step.is-in { opacity: 1; transform: none; }
+
+  /* ── Experience ──────────────────────────────────────────────── */
   .exp { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-12); align-items: start; }
   .exp__head { display: grid; gap: var(--space-4); position: sticky; top: var(--space-24); }
   .exp__head > * { margin: 0; }
@@ -175,14 +214,76 @@ const experience = [
 
   @media (max-width: 1023px) {
     .about-hero__grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
-    .approach, .exp { grid-template-columns: 1fr; gap: var(--space-8); }
-    .approach__card { margin-top: 0; }
+    .exp { grid-template-columns: 1fr; gap: var(--space-8); }
     .exp__head { position: static; }
+    .approach { padding-left: 150px; }
+    .approach__diamonds { width: 120px; }
+  }
+  /* Tablet portrait: 3 rows of 2 cards */
+  @media (min-width: 744px) and (max-width: 1023px) and (orientation: portrait) {
+    .tarot-deck { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 620px; }
+    .tarot-slot:nth-child(n) { --tilt: 0deg; }
+    .tarot-slot:nth-child(odd) { --tilt: -1deg; }
+    .tarot-slot:nth-child(even) { --tilt: .8deg; }
   }
   @media (max-width: 743px) {
     .about-hero__grid { grid-template-columns: 1fr; gap: 0; }
     .about-hero__text { padding-bottom: var(--space-8); }
     .about-hero__portrait { width: min(70%, 280px); }
-    .values { grid-template-columns: 1fr; gap: var(--space-8); }
+    .about-hero__script { white-space: normal; }
+    /* Phone: swipeable row of cards */
+    .tarot-deck { grid-column: full; max-width: none; display: flex; gap: var(--space-5, 20px); overflow-x: auto; scroll-snap-type: x mandatory;
+      padding: var(--space-4) var(--margin) var(--space-8); scroll-padding-inline: var(--margin); scrollbar-width: none; }
+    .tarot-deck::-webkit-scrollbar { display: none; }
+    .tarot-slot { flex: 0 0 72vw; max-width: 320px; scroll-snap-align: center; }
+    .tarot-slot:nth-child(n) { --tilt: 0deg; }
+    /* Steps: pills under the description, diamond cut in half at the left edge */
+    .approach { padding-left: var(--space-8); }
+    .approach__diamonds { left: calc(-1 * var(--margin) - 64px); width: 128px; }
+    .step { min-height: 0; padding: var(--space-6) 0; }
+    .step__head { display: contents; }
+    .step__title { order: 1; font-size: 1.25rem; }
+    .step__desc { order: 2; }
+    .step__cases { order: 3; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tarot, .tarot__inner, .case-pill, .tag--link { transition: none; }
+    .tarot-deck[data-anim] .tarot-slot, .steps[data-anim] .step { opacity: 1; transform: none; transition: none; }
   }
 </style>
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // Tarot cards: tap (touch) or keyboard turns a card; mouse users turn it by hovering
+  document.querySelectorAll<HTMLButtonElement>('.tarot').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      if (canHover && e.detail > 0) return;
+      btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    });
+  });
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    // Deal the deck once the section scrolls into view
+    const deck = document.querySelector<HTMLElement>('[data-deck]');
+    if (deck) {
+      deck.setAttribute('data-anim', '');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => { if (en.isIntersecting) { deck.classList.add('is-dealt'); io.disconnect(); } });
+      }, { threshold: 0.15 });
+      io.observe(deck);
+    }
+    // Approach steps slide in from the right on the way down, and back out on the way up
+    const steps = document.querySelector<HTMLElement>('[data-steps]');
+    if (steps) {
+      steps.setAttribute('data-anim', '');
+      const io2 = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) en.target.classList.add('is-in');
+          else if (en.boundingClientRect.top > 0) en.target.classList.remove('is-in');
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+      steps.querySelectorAll('.step').forEach((s) => io2.observe(s));
+    }
+  }
+</script>
