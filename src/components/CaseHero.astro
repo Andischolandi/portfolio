@@ -30,17 +30,19 @@ const { title, tagline, kicker, tags, image, alt, credit, focus = 'center', acce
   .hero :global(.hero__img), .hero :global(picture) { position: absolute; inset: 0; width: 100%; height: 100%; }
   .hero :global(.hero__img) { object-fit: cover; }
   .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,17,23,0) 30%, rgba(15,17,23,.88) 100%); }
-  .hero__text { position: relative; z-index: 1; display: grid; gap: var(--space-4); padding: var(--space-16) var(--layout-margin-content) var(--space-16); max-width: calc(1040px + 2 * var(--layout-margin-content)); }
+  .hero__text { position: relative; z-index: 1; display: grid; gap: var(--space-4); padding: var(--space-16) var(--content-edge); }
+  .hero__text > * { max-width: var(--content); }
   /* image credit: small and quiet (caption size − 2px) */
-  .hero__credit { position: absolute; z-index: 1; right: var(--margin); bottom: var(--space-4); margin: 0; font-size: 0.6875rem; line-height: 1.4; letter-spacing: 0.02em; color: rgba(255,255,255,.55); text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+  .hero__credit { position: absolute; z-index: 1; right: var(--content-edge); bottom: var(--space-4); margin: 0; font-size: 0.6875rem; line-height: 1.4; letter-spacing: 0.02em; color: rgba(255,255,255,.55); text-shadow: 0 1px 2px rgba(0,0,0,.5); }
   /* Browse case studies (wraps around) — same round overlay buttons as the lightbox */
-  .hero__nav { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); }
+  /* nav overlays the hero without taking a grid row (keeps the title anchored at the bottom) */
+  .hero__browse { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .hero__nav { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); pointer-events: auto; }
   .hero__nav--prev { left: var(--space-4); } .hero__nav--next { right: var(--space-4); }
   h1 .accent { display: block; }
   .tag--link { text-decoration: none; transition: transform .15s, box-shadow .15s; }
   .tag--link::after { content: ' ↓'; }
   .tag--link:hover { transform: translateY(-1px); box-shadow: 0 0 0 2px rgba(255,255,255,.7); }
-  @media (max-width: 1023px) { .hero__text { padding-inline: var(--margin); } }
   @media (max-width: 743px) {
     .hero { display: block; min-height: 0; }
     .hero :global(picture), .hero :global(.hero__img) { position: relative; inset: auto; aspect-ratio: 4 / 3; height: auto; }

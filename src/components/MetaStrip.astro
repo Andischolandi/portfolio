@@ -1,16 +1,24 @@
 ---
-interface Props { items: [string, string | undefined][] }
-const items = Astro.props.items.filter(([, v]) => v);
+// Project facts: 3 columns aligned with the Executive Brief below.
+// col 1: Company / Year · col 2: Platforms / Partners · col 3: Key outcomes
+interface Props { columns: [string, string | undefined][][] }
+const columns = Astro.props.columns.map((col) => col.filter(([, v]) => v)).filter((col) => col.length);
 ---
 <section class="meta" aria-label="Project facts">
-  <dl>
-    {items.map(([k, v]) => (<div><dt class="t-label-caps-small text-muted">{k}</dt><dd class="t-body-small">{v}</dd></div>))}
+  <dl class="meta__cols">
+    {columns.map((col) => (
+      <div class="meta__col">
+        {col.map(([k, v]) => (<div class="meta__item"><dt class="t-label-caps-small text-muted">{k}</dt><dd class="t-body-small">{v}</dd></div>))}
+      </div>
+    ))}
   </dl>
 </section>
 <style>
-  .meta { background: var(--color-bg-surface); border-bottom: 1px solid var(--color-border-default); padding: var(--space-6) var(--layout-margin-content); }
-  dl { margin: 0; display: grid; grid-template-columns: repeat(6, auto); gap: var(--space-4) var(--space-8); justify-content: start; }
+  .meta { background: var(--color-bg-surface); border-bottom: 1px solid var(--color-border-default); padding: var(--space-6) var(--content-edge); }
+  /* same column widths and gap as .brief__cols */
+  .meta__cols { margin: 0; max-width: var(--content); display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); }
+  .meta__col { display: grid; gap: var(--space-4); align-content: start; }
   dd { margin: 4px 0 0; }
-  @media (max-width: 1023px) { .meta { padding-inline: var(--margin); } dl { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 743px) { dl { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 1023px) and (min-width: 744px) { .meta__cols { gap: var(--space-6); } }
+  @media (max-width: 743px) { .meta__cols { grid-template-columns: 1fr 1fr; gap: var(--space-4) var(--space-6); } .meta__col:last-child { grid-column: 1 / -1; } }
 </style>

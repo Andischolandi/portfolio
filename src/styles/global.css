@@ -10,8 +10,11 @@
   --content: var(--layout-container-content);/* 1120 */
   --wide: var(--layout-container-wide);      /* 1344 */
   --section-pad: var(--space-24);
+  /* left/right edge of the 1120px content area, for full-bleed blocks that are not on the section grid */
+  /* = where the section grid's content column starts (see .section) — % is the full-bleed element's width */
+  --content-edge: max(calc(var(--margin) + (var(--wide) - var(--content)) / 2), calc((100% - var(--content)) / 2));
 }
-@media (max-width: 1023px) { :root { --margin: var(--space-8); --section-pad: var(--space-16); } }
+@media (max-width: 1023px) { :root { --margin: var(--space-8); --section-pad: var(--space-16); --content-edge: var(--margin); } }
 @media (max-width: 743px)  { :root { --margin: var(--space-4); --section-pad: var(--space-12); } }
 
 *, *::before, *::after { box-sizing: border-box; }

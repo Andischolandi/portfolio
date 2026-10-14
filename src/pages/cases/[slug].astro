@@ -21,8 +21,8 @@ const d = entry.data;
 const { Content } = await render(entry);
 ---
 <Base title={`${d.title} ${d.tagline} — Andreas Schwankl`} description={d.summary ?? d.teaser} active="projects">
-  <CaseHero title={d.title} tagline={d.tagline} kicker={`Case study · ${d.company.split('/')[0].trim()}`} tags={d.tags} image={d.keyVisual} alt={d.keyVisualAlt} credit={d.keyVisualCredit} focus={d.focus} accent={d.accent} prev={prev} next={next} />
-  <MetaStrip items={[["Company", d.company], ["Year", d.timeframe], ["Platforms", d.platforms], ["Partners", d.partners], ["Standard", d.standard], ["Key outcome", d.keyOutcome]]} />
+  <CaseHero title={d.title} tagline={d.tagline} kicker={`Case study · ${d.company.split(/[\/·]/)[0].trim()}`} tags={d.tags} image={d.keyVisual} alt={d.keyVisualAlt} credit={d.keyVisualCredit} focus={d.focus} accent={d.accent} prev={prev} next={next} />
+  <MetaStrip columns={[[["Company", d.company], ["Year", d.timeframe]], [["Platforms", d.platforms], ["Partners", d.partners]], [["Key outcomes", d.keyOutcome]]]} />
   <div data-accent={d.accent}>
   {d.draft ? (
     <section class="section"><p class="t-body-large text-secondary">This case study is being written. Check back soon — or <a href="/contact/">get in touch</a> and I'll walk you through it.</p></section>

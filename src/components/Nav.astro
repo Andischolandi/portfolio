@@ -29,6 +29,16 @@ const links = [
     btn.setAttribute('aria-expanded', String(!open));
     menu?.classList.toggle('is-open', !open);
   });
+  // Close the mobile menu when tapping anywhere outside it
+  document.addEventListener('click', (e) => {
+    if (btn?.getAttribute('aria-expanded') !== 'true') return;
+    const t = e.target as Node;
+    if (!menu?.contains(t) && !btn.contains(t)) btn.click();
+  });
+  // More see-through bar while the page is scrolled
+  const bar = document.querySelector<HTMLElement>('.nav');
+  const onScroll = () => bar?.classList.toggle('is-scrolled', window.scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && btn?.getAttribute('aria-expanded') === 'true') { btn.click(); btn.focus(); }
   });
@@ -39,14 +49,17 @@ const links = [
     display: flex; align-items: center; justify-content: space-between;
     min-height: 64px;
     /* logo and links sit on the content area edges of the page grid (1120px), not the screen edge */
-    padding-inline: max(var(--margin), calc((100% - var(--content)) / 2));
+    padding-inline: var(--content-edge);
     background: color-mix(in srgb, var(--color-bg-page) 93%, transparent);
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--color-border-default);
   }
+  .nav { transition: background-color .25s ease; }
+  .nav.is-scrolled { background: color-mix(in srgb, var(--color-bg-page) 72%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2); }
   .nav__logo { text-decoration: none; }
   /* Landing (Figma): name a size bigger, bar fades from the hero's sand (left) into the warm white bar (right) */
   .nav--landing { background: linear-gradient(90deg, #cac6bc 0%, color-mix(in srgb, #f5f4f0 93%, transparent) 100%); }
+  .nav--landing.is-scrolled { background: linear-gradient(90deg, color-mix(in srgb, #cac6bc 72%, transparent) 0%, color-mix(in srgb, #f5f4f0 72%, transparent) 100%); }
   .nav--landing .nav__logo { font-size: 1.375rem; line-height: 1.27; }
   .nav__menu ul { display: flex; gap: var(--space-8); list-style: none; margin: 0; padding: 0; }
   .nav__menu a { text-decoration: none; color: var(--color-text-secondary); padding-block: 6px; border-bottom: 2px solid transparent; }

@@ -16,12 +16,12 @@ const older = all.filter((c) => c.data.section === 'older');
     <p class="t-body-large text-secondary">A curated selection of projects spanning product design, strategy and team leadership.</p>
   </section>
   <section class="section" data-theme="sand" aria-labelledby="latest-title">
-    <h2 id="latest-title" class="t-section-title is-content"><span class="t-highlight">The latest projects</span></h2>
+    <h2 id="latest-title" class="t-section-title is-content"><span class="t-highlight">The latest · 2025 – 2022</span></h2>
     <div class="grid-2 is-wide">{latest.map((e) => <ProjectCard entry={e} />)}</div>
   </section>
   {older.length > 0 && (
     <section class="section" aria-labelledby="older-title">
-      <h2 id="older-title" class="t-section-title is-content"><span class="t-highlight">Older cases and projects</span></h2>
+      <h2 id="older-title" class="t-section-title is-content"><span class="t-highlight">Earlier work · lasting impact</span></h2>
       <div class="grid-3 is-wide">{older.map((e) => <ProjectCardSmall entry={e} />)}</div>
     </section>
   )}

@@ -26,13 +26,39 @@
   // Reserve room for the caption below the fitted image
   const measure = () => fig.style.setProperty('--cap-h', `${cap.offsetHeight}px`);
 
-  function setZoom(on: boolean) {
-    dlg.classList.toggle('is-actual', on);
-    // Zoom into the centre of the image, never into an empty corner
-    requestAnimationFrame(() => {
-      stage.scrollLeft = (stage.scrollWidth - stage.clientWidth) / 2;
-      stage.scrollTop = on ? (img.offsetTop + img.offsetHeight / 2) - stage.clientHeight / 2 : 0;
-    });
+  // ---- Zoom: the image (not the page) is scaled by setting its width in px ----
+  const isPhone = () => window.matchMedia('(max-width: 743px), (pointer: coarse)').matches;
+  // width of the image when fitted to the screen
+  function fitWidth() {
+    const cs = getComputedStyle(stage);
+    const availW = stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const availH = stage.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - cap.offsetHeight;
+    const nw = img.naturalWidth || 1, nh = img.naturalHeight || 1;
+    return Math.min(nw, availW, availH * nw / nh);
+  }
+  const maxWidth = () => Math.max(img.naturalWidth || 1, fitWidth());
+  function applyWidth(w: number, anchor?: { x: number; y: number }) {
+    const fit = fitWidth();
+    w = Math.min(Math.max(w, fit), maxWidth());
+    const zoomed = w > fit * 1.02;
+    const before = img.getBoundingClientRect();
+    dlg.classList.toggle('is-actual', zoomed);
+    img.style.width = zoomed ? `${w}px` : '';
+    if (!zoomed) { stage.scrollTo(0, 0); return; }
+    if (anchor) {
+      // keep the point under the fingers / cursor where it is
+      const rx = (anchor.x - before.left) / before.width, ry = (anchor.y - before.top) / before.height;
+      const after = img.getBoundingClientRect();
+      stage.scrollLeft += after.left + rx * after.width - anchor.x;
+      stage.scrollTop += after.top + ry * after.height - anchor.y;
+    }
+  }
+  function setZoom(on: boolean, at?: { x: number; y: number }) {
+    if (!on) { applyWidth(0); return; }
+    // Desktop: real size. Phone: 50 % of the real size (at least 1.6× the fitted size) — easier to handle
+    const target = isPhone() ? Math.max(img.naturalWidth * 0.5, fitWidth() * 1.6) : img.naturalWidth;
+    const r = img.getBoundingClientRect();
+    applyWidth(target, at ?? { x: r.left + r.width / 2, y: r.top + r.height / 2 });
   }
 
   function show(i: number) {
@@ -46,6 +72,7 @@
     measure();
     status.textContent = items.length > 1 ? `Image ${index + 1} of ${items.length}` : '';
     dlg.classList.remove('is-actual');     // next/previous always opens fitted to the screen
+    img.style.width = '';
     stage.scrollTo(0, 0);
     dlg.classList.add('is-loading');
     const pre = new Image();
@@ -69,24 +96,42 @@
   dlg.querySelector('.lightbox__btn--prev')!.addEventListener('click', () => show(index - 1));
   dlg.querySelector('.lightbox__btn--next')!.addEventListener('click', () => show(index + 1));
   dlg.querySelector('.lightbox__btn--close')!.addEventListener('click', () => dlg.close());
-  img.addEventListener('click', () => setZoom(!dlg.classList.contains('is-actual')));
+  img.addEventListener('click', (e) => { if (pinched) { pinched = false; return; } setZoom(!dlg.classList.contains('is-actual'), { x: e.clientX, y: e.clientY }); });
   stage.addEventListener('click', (e) => { if (e.target === stage) dlg.close(); });
   dlg.addEventListener('keydown', (e) => {
     if (items.length < 2) return;
     if (e.key === 'ArrowLeft') { e.preventDefault(); show(index - 1); }
     if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
   });
-  dlg.addEventListener('close', () => { token++; img.removeAttribute('src'); dlg.classList.remove('is-loading', 'is-actual'); opener?.focus(); });
+  dlg.addEventListener('close', () => { token++; img.removeAttribute('src'); img.style.width = ''; dlg.classList.remove('is-loading', 'is-actual'); opener?.focus(); });
   window.addEventListener('resize', () => { if (dlg.open) measure(); });
+
+  // Pinch-zoom the image only (the page and its controls never scale)
+  let pinch: { d: number; w: number } | null = null, pinched = false;
+  const dist = (t: TouchList) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  const mid = (t: TouchList) => ({ x: (t[0].clientX + t[1].clientX) / 2, y: (t[0].clientY + t[1].clientY) / 2 });
+  dlg.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) pinched = false;
+    if (e.touches.length === 2) { pinch = { d: dist(e.touches), w: img.getBoundingClientRect().width }; e.preventDefault(); }
+  }, { passive: false });
+  dlg.addEventListener('touchmove', (e) => {
+    if (!pinch || e.touches.length !== 2) return;
+    e.preventDefault();
+    pinched = true;
+    applyWidth(pinch.w * dist(e.touches) / pinch.d, mid(e.touches));
+  }, { passive: false });
+  dlg.addEventListener('touchend', (e) => { if (e.touches.length < 2) pinch = null; });
+  // Safari: block the browser's own page zoom gesture while the lightbox is open
+  ['gesturestart', 'gesturechange'].forEach((t) => dlg.addEventListener(t, (e) => e.preventDefault()));
 
   // Swipe left/right to browse (only while the image is fitted, not zoomed)
   let sx = 0, sy = 0, tracking = false;
   stage.addEventListener('touchstart', (e) => {
-    tracking = e.touches.length === 1 && !dlg.classList.contains('is-actual') && (window.visualViewport?.scale ?? 1) <= 1.01;
+    tracking = e.touches.length === 1 && !dlg.classList.contains('is-actual');
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
   }, { passive: true });
   stage.addEventListener('touchend', (e) => {
-    if (!tracking || items.length < 2) return;
+    if (!tracking || pinched || items.length < 2) return;
     const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(index + (dx < 0 ? 1 : -1));
   }, { passive: true });
@@ -95,10 +140,10 @@
   /* Page background; image centred and fitted to the viewport (portrait + landscape); caption belongs to the image */
   .lightbox { --pad: var(--space-8, 32px); --edge: 16px;
     width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
-    background: var(--color-bg-page); color: var(--color-text-primary); overflow: hidden; }
+    background: var(--color-bg-page); color: var(--color-text-primary); overflow: hidden; touch-action: pan-x pan-y; }
   .lightbox::backdrop { background: var(--color-bg-page); }
   .lightbox__stage { position: absolute; inset: 0; overflow: auto; display: flex; padding: var(--pad);
-    touch-action: pan-x pan-y pinch-zoom; overscroll-behavior: contain; }
+    touch-action: pan-x pan-y; overscroll-behavior: contain; }
   /* margin:auto centres in both axes and keeps every part reachable when the zoomed image overflows */
   .lightbox__figure { margin: auto; display: table; outline: none; }
   .lightbox__figure img { display: block; max-width: calc(100vw - 2 * var(--pad));
