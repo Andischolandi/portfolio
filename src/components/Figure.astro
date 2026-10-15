@@ -16,7 +16,8 @@ const w = layout === 'wide' ? 1344 : 1120;
 <style>
   .figure { margin-top: var(--space-6); display: grid; gap: var(--space-3); }
   /* captions start at the content column of the grid, not at the image edge */
-  .figure.is-wide figcaption { width: min(100%, var(--content)); justify-self: center; }
+  .figure.is-wide figcaption { padding-inline: calc((var(--wide) - var(--content)) / 2); }
+  @media (max-width: 1023px) { .figure.is-wide figcaption { padding-inline: 0; } }
   .figure__link { position: relative; display: block; border-radius: var(--radius-md); overflow: hidden; cursor: zoom-in; }
   .figure__link img { width: 100%; }
 </style>

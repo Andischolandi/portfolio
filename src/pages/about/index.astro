@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import ContactTeaser from '../../components/ContactTeaser.astro';
 import portrait from '../../assets/profile/profile-about.png';
 import type { ImageMetadata } from 'astro';
+import processArrows from '../../content/cases/illustrations/process-bg-arrows.png';
 const cv = '/cv/CV_Andreas-Schwankl_2026-10_eng.pdf';
 // Hero pills jump to the sections below
 const jumps = [
@@ -14,6 +15,7 @@ const jumps = [
 // Values & Principles — tarot cards (front: illustration, back: the principle)
 const cards = import.meta.glob<{ default: ImageMetadata }>('../../content/cases/illustrations/card-*.png', { eager: true });
 const card = (slug: string, side: 'front' | 'back') => cards[`../../content/cases/illustrations/card-${slug}-${side}.png`].default;
+const ordinals = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth'];
 const values = [
   { n: 'I', name: 'The Listener', slug: '1-listener', t: 'Human-Centered Design', d: 'Every decision starts with real people — their needs, behaviours and barriers. I bring user evidence into rooms where it is usually missing.' },
   { n: 'II', name: 'The Clarifier', slug: '2-clarifier', t: 'Clarity Over Complexity', d: 'I turn overwhelming findings into a few clear priorities that teams can act on.' },
@@ -69,14 +71,13 @@ const experience = [
   <section class="section about-values" data-theme="sand" id="values" aria-labelledby="values-title">
     <div class="about-center is-content">
       <h2 id="values-title" class="t-display-h2">Values &amp; Principles</h2>
-      <p class="t-body-default text-secondary">These principles have shaped how I design, how I lead teams and how I approach complex challenges. <span class="cards-hint cards-hint--hover">Hover over a card to turn it.</span><span class="cards-hint cards-hint--tap">Tap a card to turn it.</span></p>
+      <p class="t-body-default text-secondary">These principles have shaped how I design, how I lead teams and how I approach complex challenges. <span class="cards-hint cards-hint--tap" aria-hidden="true">Tap a card to turn it.</span></p>
     </div>
-    <ul class="tarot-deck is-content" data-deck>
+    <ul class="tarot-deck is-content" data-deck aria-label="Six cards, one for each value and principle">
       {values.map((v, i) => (
         <li class="tarot-slot" style={`--i:${i}`}>
-          <h3 class="visually-hidden">{v.t} — card {v.n}, {v.name}</h3>
-          <p class="visually-hidden">{v.d}</p>
-          <button class="tarot" type="button" aria-pressed="false" aria-label={`Turn card ${v.n}: ${v.name}`}>
+          <button class="tarot" type="button" data-flipped="false">
+            <span class="visually-hidden">My {ordinals[i]} value and principle. {v.name}, a theme standing for “{v.t}”. Why? Because: {v.d} {i < values.length - 1 ? 'Please select the next card to learn more.' : 'This was my last card. Thank you for reading.'}</span>
             <span class="tarot__inner">
               <span class="tarot__face tarot__face--front"><Image src={card(v.slug, 'front')} alt="" widths={[300, 440, 640]} sizes="(max-width: 743px) 72vw, (max-width: 1023px) 40vw, 360px" /></span>
               <span class="tarot__face tarot__face--back"><Image src={card(v.slug, 'back')} alt="" widths={[300, 440, 640]} sizes="(max-width: 743px) 72vw, (max-width: 1023px) 40vw, 360px" /></span>
@@ -90,6 +91,7 @@ const experience = [
   <section class="section about-approach" data-theme="sand" id="approach" aria-labelledby="approach-title">
     <h2 id="approach-title" class="t-display-h2 is-content">My Design Approach</h2>
     <div class="approach is-content">
+      <Image class="approach__arrows" src={processArrows} alt="" widths={[900, 1600, 2700]} sizes="(max-width: 743px) 900px, 1600px" loading="lazy" />
       <svg class="approach__diamonds" viewBox="0 0 200 560" preserveAspectRatio="none" aria-hidden="true"><path d="M100 0L200 140L100 280L0 140Z M100 280L200 420L100 560L0 420Z"/></svg>
       <ol class="steps" data-steps>
         {approach.map((s) => (
@@ -152,8 +154,7 @@ const experience = [
   /* ── Values & Principles: tarot deck ─────────────────────────── */
   .about-values { row-gap: var(--space-12); }
   .cards-hint { display: block; margin-top: var(--space-2); font-weight: 600; color: var(--color-text-primary); }
-  .cards-hint--hover { display: none; }
-  @media (hover: hover) and (pointer: fine) { .cards-hint--hover { display: block; } .cards-hint--tap { display: none; } }
+  @media (hover: hover) and (pointer: fine) { .cards-hint--tap { display: none; } }
 
   .tarot-deck { list-style: none; margin: 0 auto; padding: 0; width: 100%; max-width: 1000px;
     display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-10, 40px) var(--space-8); }
@@ -170,11 +171,10 @@ const experience = [
     box-shadow: 0 1px 2px rgba(26,26,34,.10), 0 18px 36px -18px rgba(26,26,34,.45); }
   .tarot__face :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
   .tarot__face--back { transform: rotateY(180deg); }
-  .tarot[aria-pressed="true"] .tarot__inner { transform: rotateY(180deg); }
+  .tarot[data-flipped="true"] .tarot__inner, .tarot:focus-visible .tarot__inner { transform: rotateY(180deg); }
   @media (hover: hover) and (pointer: fine) {
     .tarot:hover { transform: rotate(0deg) translateY(-6px); }
     .tarot:hover .tarot__inner { transform: rotateY(180deg); }
-    .tarot[aria-pressed="true"]:hover .tarot__inner { transform: rotateY(180deg); }
   }
 
   /* Deal-in: cards slide in like being laid onto the table (only with JS) */
@@ -187,6 +187,8 @@ const experience = [
   .approach { position: relative; padding-left: 220px; margin-top: var(--space-4); }
   .approach { isolation: isolate; }
   .approach__diamonds { position: absolute; z-index: 0; left: 0; top: 0; width: 170px; height: 100%; fill: #e4e1d8; pointer-events: none; }
+  /* Arrows layer from process-bg-diamond.png: scaled so its diamonds match the SVG diamonds (diamond = 1289 of 1500px height, starts at 72/91px) */
+  .approach :global(.approach__arrows) { position: absolute; z-index: 0; left: 0; top: 0; height: 116.37%; width: auto; max-width: none; transform: translate(-2.667%, -6.07%); pointer-events: none; }
   .steps { position: relative; z-index: 1; list-style: none; margin: 0; padding: 0; display: grid; }
   .step { display: grid; gap: var(--space-3); align-content: center; min-height: 140px; padding: var(--space-4) 0; }
   .step > * { margin: 0; }
@@ -240,6 +242,7 @@ const experience = [
     /* Steps: pills under the description, diamond cut in half at the left edge */
     .approach { padding-left: var(--space-8); }
     .approach__diamonds { left: calc(-1 * var(--margin) - 64px); width: 128px; }
+    .approach :global(.approach__arrows) { left: calc(-1 * var(--margin) - 64px); }
     .step { min-height: 0; padding: var(--space-6) 0; }
     .step__head { display: contents; }
     .step__title { order: 1; font-size: 1.25rem; }
@@ -259,7 +262,7 @@ const experience = [
   document.querySelectorAll<HTMLButtonElement>('.tarot').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       if (canHover && e.detail > 0) return;
-      btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+      btn.dataset.flipped = btn.dataset.flipped === 'true' ? 'false' : 'true';
     });
   });
 
