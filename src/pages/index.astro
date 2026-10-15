@@ -11,10 +11,10 @@ const latest = (await getCollection('cases', (c) => !c.data.hidden && c.data.sec
 const cv = '/cv/CV_Andreas-Schwankl_2026-10_eng.pdf';
 // Key facts strip (first draft — light, low-key typography)
 const facts = [
-  { n: '+30%', sr: 'Plus 30 percent', l: 'user satisfaction', d: "by making JOYN’s welcome ux more personal, reducing onboarding frustration, adding on-demand channels" },
-  { n: '6 → 25', sr: 'From 6 to 25', l: 'ux org scaled', d: '4 ux squads and a ux leadership team built and led, incl. research' },
-  { n: '1 → 8M', sr: 'From 1 to 8 million', l: 'monthly active users', d: "design and research support for JOYN’s growth and DACH expansion" },
-  { n: '5', sr: '5', l: 'industries shaped', d: 'telecoms · maps & location · TV & streaming · edu · e-commerce & SaaS' },
+  { n: '+ 30%', sr: 'Plus 30 percent', l: 'user satisfaction', d: ['by improving JOYN’s', 'welcome ux, reducing', 'onboarding frustration,', 'adding on-demand', 'channels & more'] },
+  { n: '6 > 25', sr: 'From 6 to 25', l: 'ux org scaled', d: ['4 ux squads and a ux', 'leadership team built', 'and led, incl. research'] },
+  { n: '1 > 8M', sr: 'From 1 to 8 million', l: 'monthly active users', d: ['design and research', 'support for JOYN’s', 'growth and DACH', 'expansion'] },
+  { n: '5', sr: '5', l: 'industries supported', inline: true, d: ['telecoms · maps &', 'location · TV &', 'streaming · edu ·', 'e-commerce & SaaS'] },
 ];
 const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/deation, Cornelsen and Seven.One Entertainment Group';
 ---
@@ -42,10 +42,9 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
     <h2 id="facts-title" class="visually-hidden">Facts and figures</h2>
     <ul class="facts is-content" aria-labelledby="facts-title">
       {facts.map((f) => (
-        <li class="fact">
-          <p class="fact__num"><span aria-hidden="true">{f.n}</span><span class="visually-hidden">{f.sr}</span></p>
-          <p class="fact__label">{f.l}</p>
-          <p class="fact__detail">{f.d}</p>
+        <li class:list={['fact', { 'fact--inline': f.inline }]}>
+          <p class="fact__head"><span class="fact__num"><span aria-hidden="true">{f.n}</span><span class="visually-hidden">{f.sr}</span></span> <span class="fact__label">{f.l}</span></p>
+          <p class="fact__detail">{f.d.map((line, k) => <><span class="fact__line">{line}</span>{k < f.d.length - 1 ? ' ' : ''}</>)}</p>
         </li>
       ))}
     </ul>
@@ -90,11 +89,12 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
   /* Facts strip: deliberately quiet — light numerals, regular labels, hairline rules */
   .facts { list-style: none; margin: 0 0 var(--space-12); padding: var(--space-6) 0 0;
     display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6) var(--space-8); }
-  .fact { display: grid; gap: var(--space-1, 4px); align-content: start; }
+  .fact { display: grid; gap: var(--space-3); align-content: start; }
   .fact > p { margin: 0; }
-  .fact__num { font-weight: 300; font-size: 2.25rem; line-height: 1.15; letter-spacing: -0.01em; color: var(--color-text-primary); font-variant-numeric: lining-nums; }
-  .fact__label { font-size: 0.9375rem; font-weight: 500; line-height: 1.4; color: var(--color-text-primary); }
-  .fact__detail { font-size: 0.8125rem; line-height: 1.5; color: var(--color-text-secondary); text-wrap: pretty; }
+  .fact__head { display: grid; gap: 2px; }
+  .fact__num { font-weight: 400; font-size: 2.5rem; line-height: 1.1; letter-spacing: -0.01em; color: var(--color-text-primary); }
+  .fact__label { font-size: 1.0625rem; font-weight: 700; line-height: 1.3; color: var(--color-text-primary); }
+  .fact__detail { font-size: 0.9375rem; line-height: 1.55; color: var(--color-text-secondary); }
   .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
   .home-work__all { display: flex; justify-content: center; margin: var(--space-6) 0 0; }
   .clients { margin: var(--space-12) 0 0; user-select: none; -webkit-user-select: none; pointer-events: none; }
@@ -118,8 +118,15 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
     .home-hero__text { padding-bottom: var(--space-8); }
     .home-hero__portrait { width: min(78%, 360px); justify-self: end; }
     .grid-2 { grid-template-columns: 1fr; }
-    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6) var(--space-5, 20px); margin-bottom: var(--space-10, 40px); }
-    .fact__num { font-size: 1.875rem; }
+    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-10, 40px) var(--space-4); margin-bottom: var(--space-10, 40px); }
+    .fact__num { font-size: 2.125rem; }
+    .fact__label { font-size: 0.9375rem; }
+    /* Mobile: fixed line breaks as designed */
+    .fact__line { display: block; }
+    .fact__detail { font-size: min(0.9375rem, 3.8vw); }
+    /* "5 industries / supported": on mobile the label runs on next to the short number */
+    .fact--inline .fact__head { display: block; font-size: 0.9375rem; line-height: 1.3; }
+    .fact--inline .fact__num { line-height: 1.1; margin-right: 0.2em; }
     .clients { margin-top: var(--space-8); }
   }
 </style>
