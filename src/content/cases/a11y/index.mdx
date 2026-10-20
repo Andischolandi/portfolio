@@ -12,15 +12,15 @@ partners: "Nexum · Railslove · PIKSL"
 tags:
   - { label: "Accessibility", to: "01" }
   - { label: "UX Research", to: "02" }
-  - { label: "Inclusive Design", to: "04" }
-  - { label: "Cross-functional Leadership", to: "07" }
-  - { label: "Program & Change Management", to: "11" }
+  - { label: "Inclusive Design", to: "03" }
+  - { label: "Cross-functional Leadership", to: "05" }
+  - { label: "Program & Change Management", to: "08" }
 teaser: "Building JOYN's accessibility program from scratch — making JOYN more accessible to an audience of up to 8 million potential users."
 summary: "Facing an EAA deadline and no established accessibility practice, I initiated a cross-functional programme that combined user research, technical audits and new operating routines—helping JOYN identify barriers across five platforms and make accessibility part of everyday product development."
 keyOutcome: "5 platforms WCAG-audited, A11y is now a roadmapped & daily product practice"
 keyVisual: ./images/key-visual.png
 keyVisualAlt: "A fan of the 1% Quiz Show with motor skill impairments: a smiling woman in a power wheelchair watches the show on a tablet mounted to her chair."
-keyVisualCredit: "image by ChatGPT"
+keyVisualCredit: "prompted by ChatGPT"
 focus: "60% 40%"
 brief:
   challenge:
@@ -38,7 +38,7 @@ brief:
     - "A11y developed from a legal compliance issue to a shared responsibility"
     - "5 Platforms WCAG audited and enabled to resolve a11y debt"
     - "Legal teams enabled to report A11y progress and status quo"
-credits: "Simon Heereman (Head of UX Foundation), Payal Shah (Agile Delivery Lead), Mandana Mansouri (Product Manager), Sergei Krieger (Engineering Lead), Tania Haas and Claudia Müller (Product Design), Sarah Kosuch (Head of UX Research), Partners from Nexum, Railslove and PIKSL"
+credits: "Simon Heereman (Head of UX Foundation), Sergei Krieger (Engineering Lead), Mandana Mansouri (Product Manager), Payal Shah (Agile Delivery Lead), Tania Haas, Claudia Müller and Antanas Baltrusaitis (Product Design), Sarah Kosuch (Head of UX Research), Partners from Nexum, Railslove and PIKSL"
 ---
 
 import Chapter from '../../../components/Chapter.astro';
@@ -48,6 +48,7 @@ import SubSection from '../../../components/SubSection.astro';
 import Outcome from '../../../components/Outcome.astro';
 import Columns from '../../../components/Columns.astro';
 import Quote from '../../../components/Quote.astro';
+import Reflection from '../../../components/Reflection.astro';
 
 import context from './images/a11y-context.png';
 import audits from './images/a11y-audits.png';
@@ -66,26 +67,27 @@ import hub from './images/a11y-category-devices.png';
 import lre from './images/a11y-lre.png';
 
 <Chapter n="01" phase="Overview & Starting point" title="A legal deadline—and nobody accountable for meeting it">
-
 <Figure src={context} caption="The challenge framed in three buckets - deadline, 5 platforms and operations gap" alt="Three panels: 01 Legal deadline – EAA, June 2025. 02 Five platforms – web, iOS, Android, OTT and Fire TV, one cross-platform experience for live and on-demand streaming. 03 Operating gap – no shared owner, no shared roadmap and priorities." />
+
+<Columns>
 
 In 2024, JOYN faced a fixed deadline: meet the requirements of the European Accessibility Act by June 2025. Yet no team owned accessibility across its web, mobile and TV products. Leadership understood the urgency but feared that compliance could derail existing roadmaps or require platforms to be rebuilt.
 
 I stepped in to establish a baseline, make the challenge actionable and create the organisational ownership needed to move forward. Accessibility wasn't only a compliance requirement. If JOYN wanted to position itself as the DACH “superstreamer,” the experience needed to work for a broader range of audiences.
+
+</Columns>
 </Chapter>
 
 <Chapter n="02" phase="Understand · A11y compliance" title="First we had to make JOYN’s accessibility tangible">
-
 <Figure src={audits} caption="A roadmap to understanding - a11y audits planned for 2024" alt="Timeline of WCAG audits: web and mobile in Q3 2024 with Nexum, TV in Q4 2024 with Railslove, and PIKSL user interviews across all platforms in December 2024." />
 
 Together with my head of UX research and three specialised partners (Nexum, Railslove and PIKSL), we established JOYN’s first accessibility baseline. Technical audits assessed representative journeys across web, iOS, Android, Fire TV and other TV platforms.
 
 In parallel, interviews with people with disabilities and watching a great variety of YouTube clips of impaired users talking about their ways of using digital services helped us gain first understanding about how those barriers affected real streaming experiences.
 
-**Combining technical evidence with lived experience prevented accessibility from becoming a purely legal checklist.**
-</Chapter>
+<Reflection>Combining technical evidence with lived experience prevented accessibility from becoming a purely legal checklist.</Reflection>
 
-<Chapter n="03" phase="Understand · Audit tactics" title="Then we needed to decide which moments to analyse">
+<h3 class="t-display-h2 chapter__sub">Then we needed to decide which moments to analyse</h3>
 
 <Figure src={journey} caption="User journey touchpoints in scope for the a11y audit" alt="19 representative touchpoints grouped into Legal, Discover, Business and Streaming – from CMP dialog, home and search to sign-up, age verification, player and legal pages." />
 
@@ -98,8 +100,7 @@ Rather than auditing every screen, I proposed a set of unique templates and alig
 </Columns>
 </Chapter>
 
-<Chapter n="04" phase="Understand · User needs" title="Then we learned accessibility is not one user need">
-
+<Chapter n="03" phase="Understand · User needs" title="Accessibility is not one user need">
 <Figure src={empathy} caption="Empathy persona maps for workshops with stakeholders" alt="Three persona map workshop boards – visual, hearing and cognitive impairments – with notes, video stills and user quotes." />
 
 User interviews and WCAG analysis revealed four groups of barriers: **visual, auditory, cognitive and motor**. To make these needs tangible and support regular feedback in our agile work, we translated them into video-supported persona maps focused on behaviours, assistive technologies and content needs—not demographics.
@@ -118,9 +119,8 @@ Today’s generative AI tools could have made our persona maps more vivid and di
   { src: p3, alt: "Persona Sabine – cognitive impairment: needs simple structures and clear information to navigate with confidence." },
   { src: p4, alt: "Persona Thomas – motor impairment: wants to control everything comfortably with voice and switch control and large controls." },
 ]} />
-</Chapter>
 
-<Chapter n="05" phase="Understand · A11y tech" title="Assistive technology revealed an invisible layer of UX">
+<h3 class="t-display-h2 chapter__sub">Assistive technology revealed an invisible layer of UX</h3>
 
 <Figure src={assistive} caption="Screenreader interaction visualised - listening to the interface" alt="Four steps of a screen reader interaction: focus reaches a content tile, the interface exposes label and status, the screen reader announces it, the user decides what to do next." />
 
@@ -133,8 +133,7 @@ Watching people use screen readers and voice control revealed **an often-invisib
 </Columns>
 </Chapter>
 
-<Chapter n="06" phase="Define · The challenge" title="The audits revealed 4 systemic challenges">
-
+<Chapter n="04" phase="Define · The challenge" title="The audits revealed 4 systemic challenges">
 <Figure src={issues} caption="Audit results - A11y compliance by platform and overarching issue themes" alt="Audit findings per platform: Web 53 (critical), OTT 18 (serious), ATV 51, Android 38 and iOS 42 (moderate). Four recurring systemic barriers: navigation and orientation, content identification, player operation, and forms, account and feedback." />
 
 The audits identified an overwhelming amount of issues, but a list of defects was not yet a strategy. Some barriers were specific to individual platforms, while others—such as missing labels, inconsistent focus behaviour and insufficient content metadata—reappeared across the ecosystem.
@@ -142,8 +141,7 @@ The audits identified an overwhelming amount of issues, but a list of defects wa
 We needed to distinguish urgent platform fixes from shared structural, systemic issues that required coordinated investment aka becoming candidates for shared and coordinated roadmap priorities.
 </Chapter>
 
-<Chapter n="07" phase="Define · A11y ops" title="A cross-functional task force enabled shared learning">
-
+<Chapter n="05" phase="Define · A11y ops" title="A cross-functional task force enabled shared learning">
 <Figure src={ops} caption="A11y taskforce set up and operational landscape to make accessibility compliance a sustainable practice" alt="Diagram of the A11y task force for accessibility coordination and ops at the centre, connected through shared learning to five product teams, editorial and curation, legal and compliance, and external A11y specialists." />
 
 <Columns>
@@ -155,8 +153,7 @@ With Nexum and Railslove, we outlined coordinated accessibility priorities for r
 </Columns>
 </Chapter>
 
-<Chapter n="08" phase="Define · A11y roadmap" title="A shared roadmap turned findings into action">
-
+<Chapter n="06" phase="Define · A11y roadmap" title="A shared roadmap turned findings into action">
 <Figure src={roadmap} caption="A two-layer approach to manage time critical and continuous a11y issue resolution across 5 product teams and other stakeholders" alt="Two-layer roadmap: layer 1 legal and editorial priorities, layer 2 six priorities for continuous issue resolution across web, iOS, Android, OTT and ATV." />
 
 To prevent teams from becoming overwhelmed, we translated the audit findings into a two-layer roadmap and provided structured guidance in Confluence about how to resolve the issue at hand.
@@ -166,16 +163,14 @@ Product teams prioritised fixes within their platforms, while the cross-function
 **This gave teams autonomy without losing a common direction.**
 </Chapter>
 
-<Chapter n="09" phase="Ideate and deliver · A11y user journey" title="Designing pathways into accessible content">
-
+<Chapter n="07" phase="Deliver · A11y content hub" title="Designing pathways into accessible content">
 <Figure src={pathways} caption="Illustrated pathways into accessible streaming" alt="End-to-end journey from find to trust with four discovery pathways – brand, channel, format and direct search – leading into accessible streaming, including a new A11y hub." />
 
 The audits showed that accessibility also depended on **content discovery**. Our research identified four entry patterns and their key touchpoints, revealing a gap: a dedicated **“Barrierefrei” hub** for accessible content.
 
 The hub would improve SEO discoverability and give accessible content a new home as legacy ProSiebenSat.1 channel sites were retired in favour of JOYN’s channel pages and publishing platform.
-</Chapter>
 
-<Chapter n="10" phase="Deliver · A11y content hub" title="Accessible content also had to become discoverable">
+<h3 class="t-display-h2 chapter__sub">Accessible content also had to become discoverable</h3>
 
 <Figure src={hub} caption="A11y content hub “Barrierefreie-Inhalte” to enable curation of a11y enabled content" alt="The Barrierefrei hub shown on TV, web and phone, with the A11y content hub check-list 2026." />
 
@@ -186,16 +181,7 @@ Together with editorial and curation teams, we developed a **“Barrierefrei” 
 <p><strong>Visit the A11y Content hub here:</strong> <a class="ext-link" href="https://www.joyn.de/barrierefreie-inhalte" target="_blank" rel="noopener">{"https://www.JOYN.de/barrierefreie-inhalte"}<span class="visually-hidden"> (opens in a new tab)</span></a></p>
 </Chapter>
 
-<Chapter n="11" phase="Embed · Best practices" title="The deadline started the work and new routines made it last.">
-
-<Figure src={lre} caption="A model for change to move from shared understanding to a new way of working" alt="Three steps: Learn (audit readouts, interviews with impaired users, deep dives, empathy workshops), Ritualise (bi-weekly A11y UX CoPs, monthly content check-ins, roadmap priorities, sprint planning), Embed (Definition of Done, release audits in QA, Figma plug-ins and checklist, design system check-marks). Conclusion: accessibility awareness became part of how JOYN works." />
-
-A recurring pattern emerged: learn, ritualise, embed. Audits and research created knowledge. Shared priorities moved accessibility into roadmaps. Communities of practice, design-system standards and editorial routines then helped make that knowledge repeatable.
-
-Accessibility was no longer treated only as a deadline-driven project; it began to become part of how JOYN designed, developed and published streaming experiences.
-</Chapter>
-
-<Outcome n="12" title="Progress that extended beyond compliance" items={[
+<Outcome n="08" title="Progress that extended beyond compliance" items={[
   "Secured a place for A11y Issue resolution on 2025 product roadmaps",
   "Shared responsibility for A11y established in product teams",
   "Reporting of WCAG compliance made possible for legal teams",
@@ -203,6 +189,15 @@ Accessibility was no longer treated only as a deadline-driven project; it began 
   "A11y quality routines established in the design and product teams",
 ]} reflection="**The most important shift was cultural: teams started asking accessibility questions before issues reached an audit.** The legal deadline created urgency, but shared understanding and repeatable practices gave the work a chance to continue beyond it.">
 
+<Fragment slot="lead">
+<h3 class="t-display-h2 chapter__sub">The deadline started the work and new routines made it last.</h3>
+
+<Figure src={lre} caption="A model for change to move from shared understanding to a new way of working" alt="Three steps: Learn (audit readouts, interviews with impaired users, deep dives, empathy workshops), Ritualise (bi-weekly A11y UX CoPs, monthly content check-ins, roadmap priorities, sprint planning), Embed (Definition of Done, release audits in QA, Figma plug-ins and checklist, design system check-marks). Conclusion: accessibility awareness became part of how JOYN works." />
+
+A recurring pattern emerged: learn, ritualise, embed. Audits and research created knowledge. Shared priorities moved accessibility into roadmaps. Communities of practice, design-system standards and editorial routines then helped make that knowledge repeatable.
+
+Accessibility was no longer treated only as a deadline-driven project; it began to become part of how JOYN designed, developed and published streaming experiences.
+</Fragment>
 <Quote by="Simon Heereman" role="member of JOYN’s Accessibility Task Force Team">Andreas was a strong sponsor and driver for accessibility at JOYN because he started the initiative and consistently championed it at leadership level and stood up for the quality of the user experience. He gave us the backing, supported hands-on and organisational space to advance accessibility across teams—as part of building a better product, beyond meeting compliance requirements.</Quote>
 
 </Outcome>

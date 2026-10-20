@@ -1,15 +1,24 @@
 ---
-// Running text in two columns on desktop (≥1024px); single column on tablet and mobile.
+// Running text inside a chapter.
+// count=2 (default): two columns on desktop (≥1024px), single column on tablet and mobile.
+// count=3: lead paragraphs span the content width, list items sit side by side in three columns.
+// count=1: one column across the full content width (no 720px reading-width limit).
+interface Props { count?: 1 | 2 | 3 }
+const { count = 2 } = Astro.props;
 ---
-<div class="cols is-content"><slot /></div>
+<div class:list={['cols', 'is-content', `cols--${count}`]}><slot /></div>
 <style>
   .cols :global(p), .cols :global(ul), .cols :global(ol) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); margin: 0 0 var(--space-4); }
   .cols :global(ul), .cols :global(ol) { padding-left: 1.25em; display: grid; gap: var(--space-3); }
   .cols :global(li) { break-inside: avoid; }
   .cols :global(strong) { color: var(--color-text-primary); }
   .cols { max-width: 720px; }
+  .cols--1 { max-width: none; }
+  .cols :global(> :last-child) { margin-bottom: 0; }
   @media (min-width: 1024px) {
-    .cols { max-width: none; column-count: 2; column-gap: var(--space-12); }
+    .cols--2 { max-width: none; column-count: 2; column-gap: var(--space-12); }
+    .cols--3 { max-width: none; }
+    .cols--3 :global(ul), .cols--3 :global(ol) { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--space-12); list-style: none; padding-left: 0; }
   }
   @media (max-width: 743px) { .cols :global(p), .cols :global(ul), .cols :global(ol) { font-size: 1rem; } }
 </style>

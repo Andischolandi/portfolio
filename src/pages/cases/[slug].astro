@@ -21,7 +21,7 @@ const d = entry.data;
 const { Content } = await render(entry);
 ---
 <Base title={`${d.title} ${d.tagline} — Andreas Schwankl`} description={d.summary ?? d.teaser} active="projects">
-  <CaseHero title={d.title} tagline={d.tagline} kicker={`Case study · ${d.company.split(/[\/·]/)[0].trim()}`} tags={d.tags} image={d.keyVisual} alt={d.keyVisualAlt} credit={d.keyVisualCredit} focus={d.focus} accent={d.accent} prev={prev} next={next} />
+  <CaseHero title={d.title} tagline={d.tagline} kicker={`Case study · ${d.company.split(/[\/·]/)[0].trim()}`} tags={[...d.tags, { label: "Outcome", href: "#outcome" }, ...(d.credits ? [{ label: "Credits", href: "#credits" }] : [])]} image={d.keyVisual} alt={d.keyVisualAlt} credit={d.keyVisualCredit} focus={d.focus} accent={d.accent} prev={prev} next={next} />
   <MetaStrip columns={[[["Company", d.company], ["Year", d.timeframe]], [["Platforms", d.platforms], ["Partners", d.partners]], [["Key outcomes", d.keyOutcome]]]} />
   <div data-accent={d.accent}>
   {d.draft ? (
@@ -50,7 +50,7 @@ const { Content } = await render(entry);
       )}
       <Content />
       {d.credits && (
-        <section class="section section--ruled" aria-labelledby="credits-title">
+        <section class="section section--ruled" id="credits" aria-labelledby="credits-title">
           <h2 id="credits-title" class="t-label-caps-large text-muted">Credits</h2>
           <p class="t-body-small text-secondary">{d.credits}</p>
         </section>

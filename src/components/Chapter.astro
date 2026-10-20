@@ -12,6 +12,8 @@ const { n, phase, title, theme, headless = false } = Astro.props;
   .chapter :global(> p:not(.chapter__kicker)) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); }
   .chapter :global(> ul), .chapter :global(> ol) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); padding-left: 1.25em; display: grid; gap: var(--space-3); }
   .chapter :global(> ul strong), .chapter :global(> ol strong), .chapter :global(> p strong) { color: var(--color-text-primary); }
+  /* Sub-heading inside a chapter (from a merged section) */
+  .chapter :global(> .chapter__sub) { grid-column: content; margin: var(--space-12) 0 0; text-wrap: pretty; }
   .chapter__title { grid-column: content; text-wrap: balance; }
   .chapter__kicker { margin-bottom: calc(var(--space-6) * -0.5); }
   @media (max-width: 743px) { .chapter :global(> p:not(.chapter__kicker)), .chapter :global(> ul), .chapter :global(> ol) { font-size: 1rem; } }

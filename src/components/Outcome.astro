@@ -12,9 +12,10 @@ for (const r of refl) {
   else blocks.push({ key: false, text: r });
 }
 ---
-<section class="section outcome" data-theme="night" aria-labelledby="outcome-title">
+<section class="section outcome" id="outcome" data-theme="night" aria-labelledby="outcome-title">
   <p class="t-label-caps-large kicker">{n} · Outcome & Reflection</p>
-  <h2 id="outcome-title" class="t-display-h2">{title}</h2>
+  <h2 id="outcome-title" class="t-display-h2 outcome__title">{title}</h2>
+  <slot name="lead" />
   <ul class="outcome__grid is-content">
     {items.map((i) => <li class="t-body-default text-secondary">{i}</li>)}
   </ul>
@@ -35,6 +36,12 @@ for (const r of refl) {
   <slot />
 </section>
 <style>
+  /* Optional lead content (merged chapter) between title and results */
+  .outcome :global(> p:not(.kicker)) { font-size: 1.125rem; line-height: 1.78; color: var(--color-text-secondary); margin: 0; }
+  .outcome :global(> .chapter__sub) { grid-column: content; margin: var(--space-12) 0 0; text-wrap: pretty; }
+  /* title runs across the content area, not the reading column */
+  .outcome__title { grid-column: content; text-wrap: pretty; }
+  @media (max-width: 743px) { .outcome :global(> p:not(.kicker)) { font-size: 1rem; } }
   .outcome__grid { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); }
   .outcome__grid li { border-top: 2px solid var(--accent-fill, var(--color-accent-green-fill)); padding-top: var(--space-4); }
   .outcome__learnings { margin-top: var(--space-8); display: grid; gap: var(--space-3); }

@@ -11,10 +11,12 @@ const latest = (await getCollection('cases', (c) => !c.data.hidden && c.data.sec
 const cv = '/cv/CV_Andreas-Schwankl_2026-10_eng.pdf';
 // Key facts strip (first draft — light, low-key typography)
 const facts = [
-  { n: '+ 30%', sr: 'Plus 30 percent', l: 'user satisfaction', d: ['by improving JOYN’s', 'welcome ux, reducing', 'onboarding frustration,', 'adding on-demand', 'channels & more'] },
-  { n: '6 > 25', sr: 'From 6 to 25', l: 'ux org scaled', d: ['4 ux squads and a ux', 'leadership team built', 'and led, incl. research'] },
-  { n: '1 > 8M', sr: 'From 1 to 8 million', l: 'monthly active users', d: ['design and research', 'support for JOYN’s', 'growth and DACH', 'expansion'] },
-  { n: '5', sr: '5', l: 'industries supported', inline: true, d: ['telecoms · maps &', 'location · TV &', 'streaming · edu ·', 'e-commerce & SaaS'] },
+  { n: '7', sr: '7', l: 'UX Teams', d: ['Built and led over 15+ years'] },
+  { n: '1', sr: '1', l: 'UX LT', lsr: 'UX leadership team', d: ['Built and led at JOYN, including UX Research'] },
+  { n: '6 → 25', sr: 'From 6 to 25', l: 'UX professionals', d: ['Scaled and embedded', 'in product squads', 'at SevenOne/JOYN'] },
+  { n: '6', sr: '6', l: 'Industries', d: ['Telecoms, maps,', 'streaming, education,', 'e-commerce & SaaS'] },
+  { n: '+20%', sr: 'Plus 20 percent', l: 'USAT JOYN', lsr: 'user satisfaction at JOYN', d: ['Helped improve', 'through search, home and onboarding', 'redesigns & more'] },
+  { n: '7M+', sr: 'More than 7 million', l: 'MAU', lsr: 'monthly active users', d: ['Supported JOYN’s', 'growth through', 'design and research'] },
 ];
 const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/deation, Cornelsen and Seven.One Entertainment Group';
 ---
@@ -26,6 +28,7 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
         <p class="t-label-caps-small">Product Design Director<span aria-hidden="true"> · </span><span class="visually-hidden">, </span><span class="t-script hands-on">Hands-on</span><span aria-hidden="true"> · </span><span class="visually-hidden">, </span>Berlin</p>
         <h1 id="hero-title" class="t-display-hero">Design impactful <span class="t-script home-hero__script">experiences</span> through insight.</h1>
         <p class="t-body-large text-secondary">15+ years turning complex product challenges into clear direction — and leading design and research teams to experiences that last.</p>
+        <p class="t-body-large text-secondary home-hero__news"><strong>Just recently,</strong> I completed a 2 month full-time training as AI Manager Advanced. <a class="ext-link" href="https://lnkd.in/p/gkx386wE" target="_blank" rel="noopener">Learn more about my takeaways.<span class="visually-hidden"> (LinkedIn, opens in a new tab)</span></a></p>
         <p class="home-hero__ctas">
           <a class="btn btn--primary t-ui-button" href="/projects/">View selected work <span aria-hidden="true">→</span></a>
           <a class="btn btn--secondary t-ui-button" href="/about/">About me <span aria-hidden="true">→</span></a>
@@ -41,13 +44,19 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
   <section class="section home-work" data-theme="sand" aria-labelledby="latest-title">
     <h2 id="facts-title" class="visually-hidden">Facts and figures</h2>
     <ul class="facts is-content" aria-labelledby="facts-title">
-      {facts.map((f) => (
-        <li class:list={['fact', { 'fact--inline': f.inline }]}>
-          <p class="fact__head"><span class="fact__num"><span aria-hidden="true">{f.n}</span><span class="visually-hidden">{f.sr}</span></span> <span class="fact__label">{f.l}</span></p>
+      {facts.map((f, i) => (
+        <li class="fact" hidden={i >= 4}>
+          <p class="fact__head"><span class="fact__num"><span aria-hidden="true">{f.n}</span><span class="visually-hidden">{f.sr}</span></span> {f.lsr ? <span class="fact__label"><span aria-hidden="true">{f.l}</span><span class="visually-hidden">{f.lsr}</span></span> : <span class="fact__label">{f.l}</span>}</p>
           <p class="fact__detail">{f.d.map((line, k) => <><span class="fact__line">{line}</span>{k < f.d.length - 1 ? ' ' : ''}</>)}</p>
         </li>
       ))}
     </ul>
+    <script is:inline>
+      // show a random selection of 4 out of all facts on every page load (original order kept)
+      (function () { var items = [].slice.call(document.querySelectorAll('.facts > .fact')); if (items.length <= 4) return;
+        var idx = items.map(function (_, i) { return i; }).sort(function () { return Math.random() - 0.5; }).slice(0, 4);
+        items.forEach(function (li, i) { li.hidden = idx.indexOf(i) === -1; }); })();
+    </script>
     <h2 id="latest-title" class="t-section-title is-content"><span class="t-highlight">Latest projects and cases</span></h2>
     <div class="grid-2 is-wide">{latest.map((e) => <ProjectCard entry={e} />)}</div>
     <p class="home-work__all is-content"><a class="btn btn--primary t-ui-button" href="/projects/">Case Studies · View all <span aria-hidden="true">→</span></a></p>
@@ -63,7 +72,7 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
   <section class="section home-quote" data-theme="earth" aria-labelledby="philosophy-title">
     <div class="home-quote__inner is-content">
       <h2 id="philosophy-title" class="t-label-caps-large text-muted">My Design Philosophy</h2>
-      <p class="t-quote-large">“Great design is your helpful servant, when complicated and stressful things feel effortless and joyful.”</p>
+      <p class="t-quote-large">“I approach design leadership as I approach product design: understanding people, context and goals, exploring possibilities and learning through experimentation—to shape better products and better ways of working.”</p>
       <p><a class="home-quote__link t-label-caps-small" href="/about/#values">Read my values &amp; principles <span aria-hidden="true">→</span></a></p>
     </div>
   </section>
@@ -79,6 +88,8 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
   .home-hero__text h1 { margin-top: var(--space-20, 80px); }
   .home-hero__text > * { margin: 0; }
   .home-hero__text .t-body-large { max-width: 34em; }
+  .home-hero__news { margin-top: calc(var(--space-6) * -0.5) !important; }
+  .home-hero__news strong { color: var(--color-text-primary); }
   .hands-on { text-transform: uppercase; letter-spacing: 0.08em; font-size: 1.1em; }
   /* Kalam sits high on its line box; tighten the box and drop the word onto the Inter baseline rhythm */
   .home-hero__script { display: block; text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.9; padding-top: 0.19em; margin-bottom: -0.2em; }
@@ -90,6 +101,7 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
   .facts { list-style: none; margin: 0 0 var(--space-12); padding: var(--space-6) 0 0;
     display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6) var(--space-8); }
   .fact { display: grid; gap: var(--space-3); align-content: start; }
+  .fact[hidden] { display: none; }
   .fact > p { margin: 0; }
   .fact__head { display: grid; gap: 2px; }
   .fact__num { font-weight: 400; font-size: 2.5rem; line-height: 1.1; letter-spacing: -0.01em; color: var(--color-text-primary); }
@@ -124,9 +136,6 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
     /* Mobile: fixed line breaks as designed */
     .fact__line { display: block; }
     .fact__detail { font-size: min(0.9375rem, 3.8vw); }
-    /* "5 industries / supported": on mobile the label runs on next to the short number */
-    .fact--inline .fact__head { display: block; font-size: 0.9375rem; line-height: 1.3; }
-    .fact--inline .fact__num { line-height: 1.1; margin-right: 0.2em; }
     .clients { margin-top: var(--space-8); }
   }
 </style>

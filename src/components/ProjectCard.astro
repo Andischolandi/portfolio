@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import Credit from './Credit.astro';
 interface Props { entry: CollectionEntry<'cases'>; headingLevel?: 'h2' | 'h3' }
 const { entry, headingLevel: H = 'h3' } = Astro.props;
 const d = entry.data;
@@ -10,6 +11,7 @@ const href = `/cases/${entry.id}/`;
   {d.draft
     ? <div class="card__media"><Image class="card__img" src={d.keyVisual} alt="" widths={[480, 660, 1000, 1320]} sizes="(max-width: 743px) 100vw, (max-width: 1440px) 50vw, 660px" style={`object-position:${d.focus}`} /></div>
     : <a class="card__media" href={href} tabindex="-1" aria-hidden="true"><Image class="card__img" src={d.keyVisual} alt="" widths={[480, 660, 1000, 1320]} sizes="(max-width: 743px) 100vw, (max-width: 1440px) 50vw, 660px" style={`object-position:${d.focus}`} /></a>}
+  {d.keyVisualCredit && <Credit text={d.keyVisualCredit} id={`credit-card-${entry.id}`} />}
   <div class="card__overlay">
     <p class="card__meta t-label-caps-small accent">{d.timeframe} · {d.company}</p>
     <H class="card__title">

@@ -1,0 +1,41 @@
+---
+// Floating "back to top" button: appears below the fold, jumps instantly (no animation),
+// fades out while the page is idle and comes back on any scroll / pointer / key activity.
+---
+<button class="to-top btn-icon-overlay" type="button" aria-label="Jump back to the top of the page" data-to-top>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/><path d="M6 5h12"/></svg>
+</button>
+<style>
+  .to-top { box-shadow: 0 0 0 1px rgba(255,255,255,.22), 0 2px 10px rgba(0,0,0,.18); position: fixed; z-index: 40; right: var(--space-6); bottom: var(--space-6);
+    opacity: 0; visibility: hidden; transition: opacity 1.2s ease, visibility 0s linear 1.2s, background-color .15s; }
+  /* below the fold: shown immediately while the user is active */
+  .to-top.is-available.is-active, .to-top.is-available:focus-visible, .to-top.is-available:hover {
+    opacity: 1; visibility: visible; transition: opacity .12s ease, visibility 0s, background-color .15s; }
+  /* never on top of the lightbox */
+  :global(body:has(dialog[open])) .to-top { display: none; }
+  @media (max-width: 743px) { .to-top { right: var(--space-4); bottom: var(--space-4); } }
+</style>
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-to-top]');
+  if (btn) {
+    let idle: number | undefined;
+    const fold = () => window.innerHeight * 0.9;
+    const wake = () => {
+      btn.classList.toggle('is-available', window.scrollY > fold());
+      btn.classList.add('is-active');
+      window.clearTimeout(idle);
+      idle = window.setTimeout(() => btn.classList.remove('is-active'), 1800);
+    };
+    window.addEventListener('scroll', wake, { passive: true });
+    window.addEventListener('pointermove', wake, { passive: true });
+    window.addEventListener('touchstart', wake, { passive: true });
+    window.addEventListener('keydown', wake);
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+      // move focus to the page title so keyboard and screen-reader users land at the top too
+      const h1 = document.querySelector<HTMLElement>('h1');
+      if (h1) { h1.setAttribute('tabindex', '-1'); h1.focus({ preventScroll: true }); }
+      btn.classList.remove('is-available', 'is-active');
+    });
+  }
+</script>

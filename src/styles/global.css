@@ -34,6 +34,7 @@ a:hover { text-decoration-thickness: 2px; }
 
 /* Visible focus for keyboard users (A11y) */
 :focus-visible { outline: 3px solid var(--color-focus-ring); outline-offset: 3px; border-radius: 2px; }
+h1[tabindex="-1"]:focus { outline: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

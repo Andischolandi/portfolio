@@ -11,17 +11,17 @@ platforms: "iOS · Android"
 partners: "JOYN.ME product team"
 tags:
   - { label: "Stakeholder Alignment", to: "02" }
-  - { label: "User Research", to: "04" }
-  - { label: "MVP Strategy", to: "07" }
-  - { label: "Interaction Design", to: "08" }
-  - { label: "Design Systems", to: "12" }
-  - { label: "Editorial Enablement", to: "14" }
+  - { label: "User Research", to: "03" }
+  - { label: "MVP Strategy", to: "05" }
+  - { label: "Interaction Design", to: "06" }
+  - { label: "Design Systems", to: "07" }
+  - { label: "Editorial Enablement", to: "08" }
 teaser: "Enabling fans of TV Shows to participate live by voting and taking part in quizzes in the JOYN Smartphone App."
 summary: "Within nine months, I led the UX strategy for integrating Seven.One's interactive TV ecosystem into JOYN, aligning two teams to replace JOYN.ME with an embedded participation capability that reduced costs and deepened our understanding of highly engaged fans."
-keyOutcome: "Turned a deadline-driven integration into an embedded JOYN product capability"
+keyOutcome: "JOYN.ME sunsetted, cost saved, interactive TV enabled in JOYN apps"
 keyVisual: ./images/key-visual.png
 keyVisualAlt: "Fans of a TV show on a sofa, taking part in a live battle vote with their smartphones."
-keyVisualCredit: "image by ChatGPT"
+keyVisualCredit: "prompted by ChatGPT"
 focus: "50% 30%"
 brief:
   challenge:
@@ -38,7 +38,7 @@ brief:
     - "Reduced operating costs by retiring the standalone JOYN.ME app"
     - "Converted 10–20 % of JOYN.ME users into JOYN users"
     - "Gained deeper insights into the motivations and behaviours of highly engaged TV show fans"
-credits: "Elena Winitschenko (Product Design Lead, JOYN), Alexander Bach and Bastian Rothdeutsch (Product Designer, JOYN.ME/DAVE), Christian Walter (Director Product, JOYN), Patricia Manley (Agile Delivery Lead), Martin Altvater (Product Lead DAVE/Interactions Platform)."
+credits: "Elena Winitschenko (Product Design Lead, JOYN), Julia Ertl (Product Design, JOYN), Alexander Bach and Bastian Rothdeutsch (Product Designer, JOYN.ME/DAVE), Christian Walter (Director Product, JOYN), Patricia Manley (Agile Delivery Lead), Martin Altvater (Product Lead DAVE/Interactions Platform)."
 ---
 import Chapter from '../../../components/Chapter.astro';
 import Figure from '../../../components/Figure.astro';
@@ -75,17 +75,21 @@ import dave08 from './images/dave-guidelines-08-entry-teaser-donts.png';
 import dave09 from './images/dave-guidelines-09-all.png';
 
 <Chapter n="01" phase="Overview & starting point" title="Two products, one deadline and no shared direction">
-
 <Figure src={afterBefore} caption="One app to be sunset, one other app to be extended with interactive tv show participation" alt="Two hands each hold a smartphone. Left, labelled 'After': the JOYN app, now extended by a 'Jetzt mitmachen!' landing page for The Masked Singer. Right, labelled 'Before': the JOYN.ME app for engaging with primetime TV shows. Arrows labelled 'Interactive TV shows' and 'incl. DAVE interaction platform' show the capability moving from JOYN.ME into JOYN." />
+
+<Columns>
 
 JOYN.ME and the underlying SevenOne interaction system, was an [award-winning](https://ifdesign.com/de/winner-ranking/project/sevenone-interaction-ecosystem/564461) TV companion experience that allowed audiences to vote, play quizzes and participate in live prime-time shows of the Pro7Sat1 broadcasting group. Following JOYN's acquisition by Pro7Sat1, these capabilities had to be integrated into the JOYN mobile apps and the separate JOYN.ME service sunset.
 
 The deadline was fixed by broadcasting schedules and operational dependencies, but the integration strategy was not. Two teams entered the project with different goals, product cultures and expectations towards the future of interactive TV Show experiences within JOYN.
+
+</Columns>
 </Chapter>
 
 <Chapter n="02" phase="Understand · The context" title="Three competing perspectives shaped a bumpy start">
-
 <Figure src={tensions} caption="Three tensions between JOYN and JOYN.ME - resolved by defining a shared, feasible MVP" alt="Three pairs of opposing goals, labelled definition of value, product ambition and delivery reality: JOYN's streaming adoption versus JOYN.ME's fan engagement, a lightweight capability versus a full fan world ecosystem, and fixed broadcast commitments versus an uncertain technical integration. All three lead to 'Define a shared, feasible MVP'." />
+
+<Columns count={3}>
 
 The integration began with three unresolved tensions:
 
@@ -93,11 +97,16 @@ The integration began with three unresolved tensions:
 - **Product ambition** — JOYN aimed for a lightweight participation capability that felt coherent within its streaming experience. JOYN.ME envisioned a prominent fan world eco system that connected audiences with show narratives before, during and after broadcast.
 - **Delivery reality** — JOYN.ME was due to sunset in October 2023, while commitments to upcoming TV productions had already been made. At the same time, the feasibility of integrating Seven.One's interaction ecosystem into JOYN's React Native architecture remained uncertain.
 
-Resolving these tensions and finding consensus in [a feasible, shared MVP](#chapter-07) became the project's first task. But before, we all needed to better understand [Interactive TV Shows](#chapter-03), [the Fan](#chapter-04) and her/his [journey into participation](#chapter-05).
+</Columns>
+
+<Columns count={1}>
+
+Resolving these tensions and finding consensus in [a feasible, shared MVP](#chapter-05) became the project's first task. But before, we all needed to better understand [Interactive TV Shows](#chapter-03), [the Fan](#chapter-03) and her/his [journey into participation](#chapter-04).
+
+</Columns>
 </Chapter>
 
 <Chapter n="03" phase="Understand · Interactive TV shows" title="Participation could expand what streaming meant to audiences">
-
 <Figure src={extendedProp} caption="Interactive TV shows - unifying lean-back and lean-forward experiences in one entertainment format" alt="Diagram of an interactive TV show at the centre, surrounded by lean-back streaming media – live stream, episode stream, clips and trailers, show details and news – and lean-forward activities from gaming and social media – live voting, live quizzes, surveys and polls, chat." />
 
 <Columns>
@@ -106,12 +115,13 @@ Streaming TV Shows with JOYN was primarily designed for lean-back streaming: fin
 
 JOYN.ME introduced a different behaviour—leaning forward to vote, predict, answer or respond while a TV show was live was another way to interact with streaming content, it was adding engagement, a KPI we didn't measure and designed for yet.
 
-Our job was to explore whether participation in interactive TV Shows could add a new dimension to JOYN's value proposition without disrupting its core streaming experience. We, at the time, just didn't know how well participation would be anticipated, liked and fancied by JOYN's lean back user base.
+Our job was to explore whether participation in interactive TV Shows could add a new dimension to JOYN's value proposition without disrupting its core streaming experience.
+
+**We, at the time, just didn't know how well participation would be anticipated, liked and fancied by JOYN's lean back user base.**
 
 </Columns>
-</Chapter>
 
-<Chapter n="04" phase="Understand · User needs" title="We understood participation data - but not the fans behind it">
+<h3 class="t-display-h2 chapter__sub">Could fan engagement activate more lean back entertainment?</h3>
 
 <Figure src={insights} caption="Interactive TV experiences had not been a priority for most of JOYNs regular user base, but data still showed strong engagement during selected live shows at primetime" alt="Friends on a sofa vote with their phones during a live TV show. An overlay summarises a MaxDiff study with 1,600+ JOYN users (February 2023): content choice and live-TV access ranked highest, interactive entertainment lower but relevant to specific audiences. Conclusion: high relevance in specific moments, but not for every viewer." />
 
@@ -126,26 +136,15 @@ This insight affected the design of the MVP onboarding experience and how deep, 
 </Columns>
 </Chapter>
 
-<Chapter n="05" phase="Understand · The user journey" title="Users had seconds to move from broadcast to interaction">
-
+<Chapter n="04" phase="Understand · The user journey" title="Users had seconds to move from broadcast to interaction">
 <Figure src={journey} layout="content" caption="Step-by-step journeying into interactive TV Show participation" alt="Journey diagram: a TV moderator asks 'Who has to leave? Vote with JOYN on your phone today!' with a QR code. A timeline shows: before the show – notify me and check out tonight's candidates; on start – watch live and get ready to vote; during the show – vote now on the second screen and chat; after the show – follow-up interactions and catch-up." />
 
-For most users, participation started on the TV, not in the app. A moderator or on-screen prompt invited viewers to act while the programme continued live. New users then had 20-30 seconds to scan a code, find or install JOYN, complete onboarding and reach the active interaction before the moment passed. Mapping this cross-device journey exposed the central experience requirement: every avoidable step reduced the chance of successful participation and users needed to be guided instantly into participation.
+For most users, participation started on the TV, not in the app. A moderator or on-screen prompt invited viewers to act while the programme continued live. New users then had 30 seconds up to 2 minutes to scan a code, find or install JOYN, complete onboarding and reach the active interaction before the moment passed.
+
+Mapping this cross-device journey exposed the central experience requirement: **every avoidable step reduced the chance of successful participation and users needed to be guided instantly into participation.**
 </Chapter>
 
-<Chapter n="06" phase="Understand · Onboarding" title="Onboarding and activating new users">
-
-<Figure src={onboarding} layout="content" caption="Advanced user guidance was needed to guide user from JOYN.ME into a new and refurbished experience with JOYN." alt="Diagram: a TV prompt says 'Join now! Get JOYN on your smartphone!'. A timeline leads from JOYN.ME via the app store and sign-in or sign-up to 'Vote now' in JOYN, followed by follow-up interactions and catch-up video on demand." />
-
-Activating new users in the JOYN app after a prompt on TV or converting existing JOYN.me users to use JOYN after prompts on TV required a series of barriers to be overcome additionally:
-
-1. A JOYN.ME to JOYN app conversion experience needed to be designed
-2. A JOYN's app store promo and USP communication needed to be updated with interactive TV capabilities ("Jetzt mitmachen!") now being part of the JOYN app
-3. A Registration-Wall needed to be overcome, at least existing JOYN.ME users had it a bit easier, as they already used 7Pass, SevenOne's Authentication service, which also worked with the JOYN app.
-</Chapter>
-
-<Chapter n="07" phase="Define the MVP" title="Four user goals aligned ambition and MVP delivery">
-
+<Chapter n="05" phase="Define · The MVP" title="Four user goals aligned ambition and MVP delivery">
 <Figure src={levels} caption="Four levels of integration - from shallow to deep - from required to vision - from 01 to 04" alt="Four columns from shallow to deep integration with phone wireframes: 01 'One tap away' (attention), 02 'One central home' (discovery), both marked 'required for launch'; 03 'Connected to the show' (details context), marked 'next up after launch'; 04 'Participate while streaming' (participation in the live player), marked 'longer-term vision'." />
 
 <Columns>
@@ -162,20 +161,25 @@ The first two levels defined the MVP: a reliable experience that could meet the 
 </Columns>
 </Chapter>
 
-<Chapter n="08" phase="Ideate · Level 1 · Required for launch" title="“One tap away” - Timely guidance into interactive TV Show participation">
+<Chapter n="06" phase="Design · Required for launch" title="1 MVP = 2 Goals: “One tap away” and “One central home”">
+
+<h3 class="t-display-h2 chapter__sub">Goal 1: Timely guidance into interactive TV Show participation - “One tap away”</h3>
 
 <Figure src={level1} caption="One-tap-away - a fast entry into single tv interactions by notifications and teasers" alt="Phone wireframes from timely access to permanent access: app notification 'Voting started! The Masked Singer' on the lock screen, in-app hero notification, hero lane live teaser and TV show interaction lane on the JOYN home, all leading to the voting dialog 'Vote now! Select who is out' with four candidates. Marked 'required for launch'." />
+
+<Columns count={1}>
 
 As there was only a very short period of time available for users to act upon a moderator's prompt on TV, we needed to make sure an invitation to participate was not to be missed out on the smartphone.
 
 By the use of notifications and various teaser formats, triggered from within SevenOnes interactive eco system studio software, we delivered a moderator's prompt into the hands and attention of a JOYN user in real time, enabling instant participation on "one tap away".
-</Chapter>
 
-<Chapter n="09" phase="Ideate · Level 2 · Required for launch" title="“One central home” for all interactive TV shows">
+</Columns>
+
+<h3 class="t-display-h2 chapter__sub">Goal 2: Establish “One central home” for all interactive TV shows</h3>
 
 <Figure src={level2} caption="One central home - guiding users into a central home for all interactive TV shows on air" alt="Phone wireframes: interactive TV lane on the JOYN home, a new in-app hero teaser, the 'Jetzt mitmachen!' home listing live shows, a show home with access to all interactions, and the voting dialog. Marked 'required for launch'." />
 
-<Columns>
+<Columns count={1}>
 
 To keep the comfort established by the JOYN.ME app in providing access to all currently broadcasted interactive TV Shows, a dedicated and prominently placed “Mitmachen!”-Lane on the JOYN Home screen was introduced, calling a landing page to browse all interactive Shows currently on air and with all interactive quizzes, votings and sweepstakes made available by the editorial team.
 
@@ -184,38 +188,7 @@ Additionally, further teasers into all or specific TV Show interactions could be
 </Columns>
 </Chapter>
 
-<Chapter n="10" phase="Ideate · Level 3 · Next up after launch" title="“Connected to the format” - Full integration into the streaming journey">
-
-<Figure src={level3} caption="Connected to the format - all a show's content curated in one place - centralized and personalized" alt="Three phone wireframes: the format home of The Masked Singer with an interaction section ('centralized' – all of a show's interactive and streaming content in one place), the voting dialog, and a later version showing 'Your vote last week' ('personalized' – gamification and the user's interaction history). Marked 'next up after launch' and 'longer-term vision'." />
-
-<Columns>
-
-All content related to a TV Show streaming was curated and SEO optimized in Format Details Pages in JOYN. For those users familiar with entering the streaming experience from here, all of a show's interactive quizzes, votings and bonus content needed to be provided here as well.
-
-Otherwise, the contents of a show would become spread across different places inside JOYNs information architecture, providing a challenge for learned user behaviour of traditional JOYN users. Due to this, "Connected to the format" was a user goal, especially dear to the JOYN's ux design team.
-
-</Columns>
-</Chapter>
-
-<Chapter n="11" phase="Ideate · Level 4 · Long-term vision" title="“Participate live! while streaming” - Barrier-free participation">
-
-<FigureSplit src={level4Player} imageSide="left" size="compact" title="Live TV Player integration – Interactive TV Show Teaser" caption="Direct participation while streaming - the most immediate, seamless and deepest integration for fans of interactive TV Shows." alt="Live TV player integration: a 'Vote now!' teaser inside the fullscreen live player of The Masked Singer opens the voting dialog on top of the stream – participate while watching live TV in the fullscreen player. Marked 'longer-term vision'.">
-
-Two places inside of JOYN are relevant for interactive live streaming, the EPG, the electronic program guide with its smaller player experience on top and the fullscreen player experience.
-
-</FigureSplit>
-
-<FigureSplit src={level4Epg} imageSide="right" size="compact" title="EPG integration – Interactive TV Show Teaser" caption="The endgame for interactive live streaming inside of JOYN's live experience - not yet realised." alt="EPG integration: in the electronic programme guide with its small live player, a 'Vote now!' teaser for The Masked Singer opens the voting dialog – participate while watching live TV in the EPG view. Marked 'longer-term vision'.">
-
-Even though the most challenging from a technical point of view, having full integration of a TV shows interactive features in the live streaming experience was and still is the highest goal for making this experience truly differentiating, easy and seamless.
-
-Level 3 and 4 of the experience are still waiting to be developed.
-
-</FigureSplit>
-</Chapter>
-
-<Chapter n="12" phase="Build and deliver" title="Participation needed to feel like JOYN">
-
+<Chapter n="07" phase="Deliver · The visual system" title="Participation needed to feel like JOYN">
 <Figure src={uiStructure} caption="Two layers: the JOYN system frames each interaction, the show layer carries its brand" alt="'One product system for many show identities': annotated phone screens. Hero teaser, pop-up notification and modal dialog come from the JOYN system; images, text, brand elements, interaction teaser cards, list components and confirmation animations are delivered by the show layer via the DAVE API." />
 
 <Columns>
@@ -225,9 +198,8 @@ JOYN.ME's visual language had been designed as a standalone experience. Inside J
 Finally, the designers of both teams aligned and shipped a flexible visual system that combined JOYN conventions with format-specific colours, imagery and game mechanics. In essence we built a little design system dedicated to support interactive TV shows.
 
 </Columns>
-</Chapter>
 
-<Chapter n="13" phase="Deliver · Learn · Adjust" title="Deadline met, interactions shipped, but it was not done yet.">
+<h3 class="t-display-h2 chapter__sub">Deadline met, interactions shipped, but it was not done yet.</h3>
 
 <Figure src={shipped} caption="Five interactive TV Shows delivered in Winter 2023 / Spring 2024" alt="Overview of five shows delivered in time. Wer stiehlt mir die Show? (ProSieben): 'You vs. Joko' live quiz along the TV broadcast, season 6 Nov/Dec 2023 and season 7 from Feb 2024. Das 1% Quiz (Sat.1): live and catch-up quiz, winter/spring 2024. Promi Big Brother (Sat.1): live votings – nominations, evictions, final voting and flash polls, season 11 Nov/Dec 2023. The Masked Singer (ProSieben): live voting and guessing game exclusive to JOYN, season 9 Nov/Dec 2023 and season 10 spring 2024. Schlag den Star (ProSieben): viewer votings – live polls and sweepstakes, live events Dec 2023 and Jan/Feb 2024." />
 
@@ -238,8 +210,7 @@ This allowed five prime-time shows—including *Wer stiehlt mir die Show*, *Prom
 However, we discovered another challenge: some of the interactive content seemed to lack quality again and again.
 </Chapter>
 
-<Chapter n="14" phase="Scale · With quality in mind" title="Better tools helped editorial teams to create better interactions content">
-
+<Chapter n="08" phase="Learn & scale · Editorial quality" title="Better tools helped editorial teams to create better interactions content">
 More and more interactive content was produced, but the editorial teams struggled to produce consistent quality: copy text overflowed, copy or images went missing, color schemes seemed broken.
 
 Because contributors had different levels of interactive-design experience, we created guidelines and reusable templates covering visual quality, interaction patterns and production best practices. This helped editorial teams to quicker onboard new editors, to create more consistent content and reduced the need for support from the designer of my team to zero.
@@ -265,7 +236,7 @@ After the production and editorial teams had more guidance at hand, the quality 
 <Figure src={flow3} alt="Interaction pattern: quiz · TV show: 'The Masked Singer'. Sequence of app screens from the entry teaser via a mask character to a multiple-choice name quiz and a thank-you screen." />
 </Chapter>
 
-<Outcome n="15" title="Five shows launched and JOYN.ME sunsetted in time" items={[
+<Outcome n="09" title="Five shows launched and JOYN.ME sunsetted in time" items={[
   "By the end of 2023, interactive experiences for five scheduled prime-time shows have been delivered.",
   "Up to 300,000 unique smartphone users participated on a single primetime episode broadcasting",
   "JOYN.ME became successfully sunsetted, costs saved and its fanbase secured",

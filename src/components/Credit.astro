@@ -1,0 +1,34 @@
+---
+// Image copyright: a small © toggle in the upper right corner of an image.
+// Click / tap / Enter reveals the credit; Escape or a click elsewhere closes it.
+interface Props { text: string; id: string; class?: string }
+const { text, id, class: cls } = Astro.props;
+---
+<div class:list={['credit', cls]} data-credit>
+  <button class="credit__btn" type="button" aria-expanded="false" aria-controls={id}>
+    <span aria-hidden="true">©</span><span class="visually-hidden">Show or hide image copyright</span>
+  </button>
+  <p class="credit__text" id={id} hidden><span class="visually-hidden">Image: </span>© {text}</p>
+</div>
+<style>
+  .credit { position: absolute; z-index: 5; top: var(--space-3); right: var(--space-3); display: flex; flex-direction: row-reverse; align-items: center; gap: 6px; }
+  .credit__btn { width: 32px; height: 32px; padding: 0; border: 0; border-radius: 8px; display: grid; place-items: center;
+    background: rgba(15,17,23,.62); color: #fff; font: 600 15px/1 var(--font-sans); cursor: pointer;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: background-color .15s; }
+  .credit__btn:hover, .credit__btn[aria-expanded="true"] { background: rgba(15,17,23,.88); }
+  .credit__btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 5px rgba(15,17,23,.75); }
+  .credit__text { margin: 0; padding: 6px 10px; border-radius: 8px; background: rgba(15,17,23,.88); color: #fff;
+    font-size: 0.75rem; line-height: 1.4; white-space: nowrap; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+  .credit__text[hidden] { display: none; }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-credit]').forEach((wrap) => {
+    if (wrap.dataset.ready) return; wrap.dataset.ready = '1';
+    const btn = wrap.querySelector<HTMLButtonElement>('.credit__btn')!;
+    const pop = wrap.querySelector<HTMLElement>('.credit__text')!;
+    const set = (open: boolean) => { btn.setAttribute('aria-expanded', String(open)); pop.hidden = !open; };
+    btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); set(pop.hidden); });
+    wrap.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) { set(false); btn.focus(); } });
+    document.addEventListener('click', (e) => { if (!wrap.contains(e.target as Node)) set(false); });
+  });
+</script>
