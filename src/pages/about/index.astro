@@ -44,6 +44,9 @@ const experience = [
   { y: '2014–2018', co: 'waipu.tv / Exaring / ui/deation', role: 'UX Lead Designer', d: 'Led UX for waipu.tv multi-platform IPTV products across web, mobile, TV, and voice (Alexa), focusing on user acquisition, engagement, and retention.' },
   { y: '2008–2014', co: 'OVI / Nokia Maps / HERE', role: 'UX Design Team Lead', d: 'Led UX for global location-based services and mapping products, designing navigation, search and real-time location sensing experiences across web and mobile.' },
 ];
+const training = [
+  { y: '2026', t: 'AI Manager Advanced', d: 'Two-month full-time certification. The principle I bring into every AI workflow: human in the loop.', href: 'https://lnkd.in/p/gkx386wE', link: 'My takeaways on LinkedIn' },
+];
 ---
 <Base title="About — Andreas Schwankl, Product Design Director" description="Andreas Schwankl — Product Design Director in Berlin. Design and research leadership for digital products, from first insight to lasting practice." active="about">
   <section class="section page-head about-hero" data-theme="earth" aria-labelledby="about-title">
@@ -122,6 +125,24 @@ const experience = [
             <p class="t-label-caps-small text-muted">{e.y}</p>
             <h3 class="t-heading-h4">{e.role} <span class="timeline__co">· {e.co}</span></h3>
             <p class="t-body-small text-secondary">{e.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section about-exp" id="training" aria-labelledby="training-title">
+    <div class="exp is-content">
+      <div class="exp__head">
+        <h2 id="training-title" class="t-display-h2">Certifications &amp; Training</h2>
+        <p class="t-body-default text-secondary">How I keep learning alongside the work.</p>
+      </div>
+      <ol class="timeline">
+        {training.map((e) => (
+          <li class="timeline__item">
+            <p class="t-label-caps-small text-muted">{e.y}</p>
+            <h3 class="t-heading-h4">{e.t}</h3>
+            <p class="t-body-small text-secondary">{e.d}{e.href && <> <a class="ext-link" href={e.href} target="_blank" rel="noopener">{e.link}<span class="visually-hidden"> (opens in a new tab)</span></a></>}</p>
           </li>
         ))}
       </ol>

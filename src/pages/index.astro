@@ -11,8 +11,8 @@ const latest = (await getCollection('cases', (c) => !c.data.hidden && c.data.sec
 const cv = '/cv/CV_Andreas-Schwankl_2026-10_eng.pdf';
 // Key facts strip (first draft — light, low-key typography)
 const facts = [
-  { n: '7', sr: '7', l: 'UX Teams', d: ['Built and led over 15+ years'] },
-  { n: '1', sr: '1', l: 'UX LT', lsr: 'UX leadership team', d: ['Built and led at JOYN, including UX Research'] },
+  { n: '7', sr: '7', l: 'UX Teams', d: ['Built and led across 15+ years'] },
+  { n: '1', sr: '1', l: 'UX Leadership Team', d: ['Built and led at JOYN, including UX Research'] },
   { n: '6 → 25', sr: 'From 6 to 25', l: 'UX professionals', d: ['Scaled and embedded', 'in product squads', 'at SevenOne/JOYN'] },
   { n: '6', sr: '6', l: 'Industries', d: ['Telecoms, maps,', 'streaming, education,', 'e-commerce & SaaS'] },
   { n: '+20%', sr: 'Plus 20 percent', l: 'USAT JOYN', lsr: 'user satisfaction at JOYN', d: ['Helped improve', 'through search, home and onboarding', 'redesigns & more'] },
@@ -88,7 +88,7 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
   .home-hero__text h1 { margin-top: var(--space-20, 80px); }
   .home-hero__text > * { margin: 0; }
   .home-hero__text .t-body-large { max-width: 34em; }
-  .home-hero__news { margin-top: calc(var(--space-6) * -0.5) !important; }
+  .home-hero__news { margin-top: calc(var(--space-6) * -0.5 + 1lh) !important; }
   .home-hero__news strong { color: var(--color-text-primary); }
   .hands-on { text-transform: uppercase; letter-spacing: 0.08em; font-size: 1.1em; }
   /* Kalam sits high on its line box; tighten the box and drop the word onto the Inter baseline rhythm */
