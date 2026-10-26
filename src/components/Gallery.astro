@@ -1,14 +1,16 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-interface Props { items: { src: ImageMetadata; alt: string }[]; caption?: string; columns?: number; mobileColumns?: number }
-const { items, caption, columns = 4, mobileColumns = 2 } = Astro.props;
+import Credit from './Credit.astro';
+interface Props { items: { src: ImageMetadata; alt: string }[]; caption?: string; columns?: number; mobileColumns?: number; credit?: string }
+const { items, caption, columns = 4, mobileColumns = 2, credit } = Astro.props;
+const uid = Math.random().toString(36).slice(2, 8);
 const fulls = await Promise.all(items.map((i) => getImage({ src: i.src, format: 'webp' })));
 ---
 <figure class="gallery is-wide" style={`--cols:${columns};--mcols:${mobileColumns}`}>
   <ul>
     {items.map((it, i) => (
-      <li><a href={fulls[i].src} data-lightbox data-caption={it.alt}><Image src={it.src} alt={it.alt} widths={columns <= 2 ? [400, 700, 1000, 1320] : [320, 640, 900]} sizes={`(max-width: 743px) ${Math.round(100/mobileColumns)}vw, ${Math.round(1344/columns)}px`} /><span class="visually-hidden">(opens enlarged image)</span></a></li>
+      <li><a href={fulls[i].src} data-lightbox data-caption={it.alt}><Image src={it.src} alt={it.alt} widths={columns <= 2 ? [400, 700, 1000, 1320] : [320, 640, 900]} sizes={`(max-width: 743px) ${Math.round(100/mobileColumns)}vw, ${Math.round(1344/columns)}px`} /><span class="visually-hidden">(opens enlarged image)</span></a>{credit && <Credit text={credit} id={`credit-gal-${uid}-${i}`} />}</li>
     ))}
   </ul>
   {caption && <figcaption class="t-body-caption text-muted">{caption}</figcaption>}
@@ -16,6 +18,7 @@ const fulls = await Promise.all(items.map((i) => getImage({ src: i.src, format: 
 <style>
   .gallery { margin-top: var(--space-6); display: grid; gap: var(--space-3); }
   ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: var(--space-6); }
+  li { position: relative; }
   a { display: block; border-radius: var(--radius-md); overflow: hidden; cursor: zoom-in; }
   img { width: 100%; height: auto; display: block; }
   figcaption { padding-inline: calc((var(--wide) - var(--content)) / 2); }
