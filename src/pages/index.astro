@@ -5,6 +5,7 @@ import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ContactTeaser from '../components/ContactTeaser.astro';
 import portrait from '../assets/profile/profile-landing.png';
+import portraitDefault from '../assets/profile/profile-landing-default.png';
 import logos from '../assets/profile/client-logos.png';
 import logosMobile from '../assets/profile/client-logos-mobile.png';
 const latest = (await getCollection('cases', (c) => !c.data.hidden && c.data.section === 'latest')).sort((a, b) => a.data.order - b.data.order).slice(0, 2);
@@ -36,7 +37,11 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
         </p>
       </div>
       <div class="home-hero__portrait">
-        <Image src={portrait} alt="Illustrated portrait of Andreas Schwankl with beanie, glasses and beard, showing a peace sign." widths={[360, 540, 760, 1080]} sizes="(max-width: 743px) 80vw, (max-width: 1023px) 40vw, 511px" loading="eager" />
+        {/* Portraits alternate per visit: 1st visit = default, 2nd = peace sign, 3rd = default … (counter in localStorage).
+            Both are lazy so only the visible one is downloaded. */}
+        <script is:inline>(function(){var n=0;try{n=parseInt(localStorage.getItem('portrait-visit')||'0',10)||0;localStorage.setItem('portrait-visit',String(n+1));}catch(e){}document.documentElement.setAttribute('data-portrait',n%2?'b':'a');})();</script>
+        <Image src={portraitDefault} class="portrait portrait--a" alt="Illustrated portrait of Andreas Schwankl with beanie, glasses, beard and a patterned scarf, smiling." widths={[360, 540, 760, 1080]} sizes="(max-width: 743px) 80vw, (max-width: 1023px) 40vw, 511px" loading="lazy" />
+        <Image src={portrait} class="portrait portrait--b" alt="Illustrated portrait of Andreas Schwankl with beanie, glasses and beard, showing a peace sign." widths={[360, 540, 760, 1080]} sizes="(max-width: 743px) 80vw, (max-width: 1023px) 40vw, 511px" loading="lazy" />
       </div>
     </div>
   </section>
@@ -96,6 +101,9 @@ const clients = 'Vodafone, hobnox, HERE, waipu.tv, Joyn, WDR, Ovi by Nokia, ui/d
   .home-hero__ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); }
   .home-hero__portrait { align-self: end; justify-self: end; width: min(100%, 511px); }
   .home-hero__portrait :global(img) { display: block; width: 100%; height: auto; }
+  .home-hero__portrait :global(img.portrait--b) { display: none; }
+  :global(html[data-portrait="b"]) .home-hero__portrait :global(img.portrait--a) { display: none; }
+  :global(html[data-portrait="b"]) .home-hero__portrait :global(img.portrait--b) { display: block; }
   .home-work { padding-top: var(--space-16); }
   /* Facts strip: deliberately quiet — light numerals, regular labels, hairline rules */
   .facts { list-style: none; margin: 0 0 var(--space-12); padding: var(--space-6) 0 0;
